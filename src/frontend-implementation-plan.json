@@ -1,0 +1,84 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix admin dashboard to display and edit all features",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+      "acceptanceCriteria": [
+        "AdminPage successfully fetches all 27 Nakshatras from backend",
+        "All Nakshatras display in the grid layout with their images",
+        "Each Nakshatra card shows an edit button that links to the AdminEditPage",
+        "Loading and error states display appropriately"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminPage.tsx",
+          "operation": "modify",
+          "description": "Debug and fix the AdminPage component to properly integrate with useNakshatrasQuery hook. Ensure the query is called with the correct actor dependency, properly handles loading/error states, and renders all 27 Nakshatras in a grid layout with functional edit buttons linking to AdminEditPage."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Verify and fix the useNakshatrasQuery hook implementation to ensure it correctly calls the getAllNakshatras backend method through the actor. Ensure proper error handling, loading states, and that the query key includes the actor dependency for proper cache invalidation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields are functional for editing",
+      "acceptanceCriteria": [
+        "AdminEditPage successfully fetches single Nakshatra data by name",
+        "All form fields populate with existing Nakshatra data",
+        "Image upload component works with 4:5 aspect ratio validation",
+        "Save functionality successfully updates backend data",
+        "Success/error toast notifications display after save attempts"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminEditPage.tsx",
+          "operation": "modify",
+          "description": "Debug and fix the AdminEditPage to properly fetch individual Nakshatra data using useNakshatraQuery with the name parameter from the route. Ensure all form fields (image upload, ruling deity, symbol, description, characteristics) populate correctly with existing data and that the save functionality properly calls the update mutation with success/error toast notifications."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Verify and fix the useNakshatraQuery hook to correctly fetch individual Nakshatra data by name using the readNakshatra backend method. Ensure proper actor dependency management and error handling for missing or invalid Nakshatra names."
+        },
+        {
+          "path": "frontend/src/hooks/useNakshatraMutations.ts",
+          "operation": "modify",
+          "description": "Verify the useUpdateNakshatraMutation hook correctly calls the updateNakshatra backend method with the complete Nakshatra data structure and properly invalidates the query cache on success to refresh the admin dashboard."
+        },
+        {
+          "path": "frontend/src/components/NakshatraImageUpload.tsx",
+          "operation": "modify",
+          "description": "Verify the NakshatraImageUpload component properly validates the 4:5 aspect ratio requirement, shows upload progress, previews the image, and converts the uploaded file to a data URL format compatible with the backend imageUrl field."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Debug and fix any React Query hooks to ensure proper actor integration and data fetching from the backend",
+      "acceptanceCriteria": [
+        "useNakshatrasQuery successfully calls backend and returns data",
+        "useNakshatraQuery works with Nakshatra name parameter",
+        "Query hooks properly handle loading and error states",
+        "Actor dependency is correctly managed in query keys"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Verify the useActor hook properly manages the ICP actor lifecycle based on Internet Identity authentication state and correctly triggers query invalidation when the actor changes to ensure all dependent queries refetch with the new actor instance."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Ensure both useNakshatrasQuery and useNakshatraQuery hooks correctly depend on the actor from useActor, include the actor in their query keys for proper cache management, handle null actor states appropriately (disabling queries when actor is unavailable), and properly map backend response types to the frontend Nakshatra interface."
+        }
+      ]
+    }
+  ]
+}

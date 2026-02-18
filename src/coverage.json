@@ -1,0 +1,78 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-18T19:01:10.535Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AdminPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/AdminPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields (image upload, ruling deity, symbol, description, characteristics) are functional for editing",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AdminEditPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/hooks/useNakshatraMutations.ts",
+          "frontend/src/components/NakshatraImageUpload.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/AdminEditPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/hooks/useNakshatraMutations.ts"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Ensure the backend getAllNakshatras and getNakshatra query methods are working correctly and returning the complete data structure including name, imageUrl, description, rulingDeity, symbol, and characteristics",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Debug and fix any React Query hooks (useNakshatrasQuery, useNakshatraQuery) to ensure proper actor integration and data fetching from the backend",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useActor.ts",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/hooks/useNakshatraMutations.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminEditPage.tsx",
+    "frontend/src/pages/AdminPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Admin dashboard project for managing and editing Nakshatras and other features",
+  "architectural_notes": [
+    "Admin dashboard exists for feature management",
+    "Nakshatras are key data entities that need to be displayed and edited",
+    "Dashboard should support editing all features"
+  ],
+  "known_issues": [
+    "Admin dashboard not displaying any Nakshatras for editing",
+    "Dashboard functionality not working as expected"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-fix-the-adminpage-component-to-properly-fetch-and-display-all-27-nakshatras-from-the-backend-using-the-usenakshatrasquery-hook-ensuring-the-grid-renders-with-edit-buttons-for-each-nakshatra",
+      "title": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-the-admineditpage-properly-loads-individual-nakshatra-data-and-all-form-fields-image-upload-ruling-deity-symbol-description-characteristics-are-functional-for-editing",
+      "title": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields (image upload, ruling deity, symbol, description, characteristics) are functional for editing",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-debug-and-fix-any-react-query-hooks-usenakshatrasquery-usenakshatraquery-to-ensure-proper-actor-integration-and-data-fetching-from-the-backend",
+      "title": "Debug and fix any React Query hooks (useNakshatrasQuery, useNakshatraQuery) to ensure proper actor integration and data fetching from the backend",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-3",
+      "summary": "Ensure the backend getAllNakshatras and getNakshatra query methods are working correctly and returning the complete data structure including name, imageUrl, description, rulingDeity, symbol, and characteristics",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Star Fields Admin",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
