@@ -1,15 +1,15 @@
 {
   "frontend/src/App.tsx": "Main application component with TanStack Router setup, ThemeProvider for dark mode, and Toaster for notifications.",
   "frontend/src/components/Layout.tsx": "Layout wrapper component that provides consistent header, footer, and main content area structure using React Router's Outlet.",
-  "frontend/src/components/Header.tsx": "Application header with Star Fields branding and navigation links to Nakshatras and Admin sections.",
+  "frontend/src/components/Header.tsx": "Application header displaying \"Star Field Explorer\" branding with Moon icon and navigation links to Nakshatras and Admin sections.",
   "frontend/src/components/Footer.tsx": "Footer component with Caffeine.ai attribution link (including UTM parameters) and copyright notice using dynamic year.",
   "frontend/src/utils/nakshatraEngine.ts": "Core astronomy engine with extended NakshatraWithPada interface and calculatePada function that determines the current pada (1-4) based on Moon's precise position within the nakshatra's 13°20' range, dividing it into 4 equal parts of 3°20' each.",
   "frontend/src/hooks/useCurrentNakshatra.ts": "React hook that returns the current nakshatra with pada number, refreshing every 5 minutes to track Moon transitions.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for fetching Nakshatra data with automatic backend initialization on first call and proper actor dependency management in query keys.",
-  "frontend/src/components/CurrentNakshatraBanner.tsx": "Enhanced banner component displaying current nakshatra with expandable pada details section showing navamsa sign, title, degree range, and full interpretive description representing the current lunar climate with visual emphasis through accent colors and animated indicators.",
+  "frontend/src/components/CurrentNakshatraBanner.tsx": "Simplified banner component displaying current nakshatra with Moon icon and basic information, with pada details section removed.",
   "frontend/src/components/NakshatraGrid.tsx": "Grid component displaying all 27 Nakshatra cards with backend images, visual highlighting for current Moon position, and fallback to placeholder when no image is uploaded.",
-  "frontend/src/pages/HomePage.tsx": "Home page with title, description, current Nakshatra banner, and grid of all 27 Nakshatras.",
-  "frontend/src/pages/NakshatraDetailPage.tsx": "Detail page for individual Nakshatras displaying backend data including uploaded images, description, ruling deity, symbol, and characteristics across multiple tabs (removed the calculator tab).",
+  "frontend/src/pages/HomePage.tsx": "Home page with updated header \"Track the Moon. Understand the Moment.\" and detailed description about Nakshatras, current Nakshatra banner, and grid of all 27 Nakshatras.",
+  "frontend/src/pages/NakshatraDetailPage.tsx": "Detail page for individual Nakshatras with 4 tabs (Traits, Mythology, Ruler, Symbolism) displaying backend data including images, descriptions, and characteristics, with pada tab removed.",
   "frontend/src/pages/AdminPage.tsx": "Admin dashboard displaying all 27 Nakshatras in a grid with edit buttons, enhanced loading states showing 27 skeleton cards, better error handling with descriptive messages, and image previews in cards.",
   "frontend/src/pages/AdminEditPage.tsx": "Complete Nakshatra edit form with image upload, all data fields, improved error handling with Alert components, and better user feedback for loading and error states.",
   "frontend/src/index.css": "Global styles with OKLCH color system customized for dark theme with purple/violet primary colors and cyan accents for cosmic aesthetic.",
@@ -17,5 +17,6 @@
   "frontend/package.json": "Package configuration with astronomy-engine dependency removed, using pure JavaScript astronomical calculations instead.",
   "frontend/src/hooks/useNakshatraMutations.ts": "React Query mutation hook for updating Nakshatra data with improved error handling and targeted cache invalidation for both list and individual queries.",
   "frontend/src/components/NakshatraImageUpload.tsx": "Reusable image upload component with 4:5 aspect ratio validation, preview display, upload progress tracking, and data URL conversion for image storage.",
-  "frontend/src/utils/padaData.ts": "Complete pada data structure containing all 108 pada entries (4 padas for each of 27 nakshatras) with degree ranges, navamsa signs, titles, and full interpretive descriptions representing the current lunar climate."
+  "frontend/src/utils/padaData.ts": "Complete pada data structure containing all 108 pada entries (4 padas for each of 27 nakshatras) with degree ranges, navamsa signs, titles, and full interpretive descriptions representing the current lunar climate.",
+  "frontend/index.html": "HTML entry point with updated title \"Star Field Explorer\" for browser tab display."
 }

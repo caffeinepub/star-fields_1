@@ -7,12 +7,18 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            The 27 Nakshatras
+            Track the Moon. Understand the Moment.
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore the ancient Vedic lunar mansions and discover the cosmic energies
-            that guide our journey through the stars.
-          </p>
+          <div className="text-lg text-muted-foreground max-w-3xl mx-auto space-y-3">
+            <p>
+              A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology.
+              Each Nakshatra carries a distinct emotional, psychological, and karmic tone.
+            </p>
+            <p>
+              As the Moon moves, the feeling of time shifts.
+              This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.
+            </p>
+          </div>
         </div>
 
         <CurrentNakshatraBanner />

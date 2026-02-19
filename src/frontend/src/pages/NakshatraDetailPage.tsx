@@ -132,21 +132,13 @@ export default function NakshatraDetailPage() {
             )}
 
             <Tabs defaultValue={section || 'traits'} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="traits" asChild>
                   <Link
                     to="/nakshatras/$slug/$section"
                     params={{ slug: nakshatra.slug, section: 'traits' }}
                   >
                     Traits
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="pada" asChild>
-                  <Link
-                    to="/nakshatras/$slug/$section"
-                    params={{ slug: nakshatra.slug, section: 'pada' }}
-                  >
-                    Pada
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="mythology" asChild>
@@ -197,20 +189,6 @@ export default function NakshatraDetailPage() {
                         once the admin adds content through the dashboard.
                       </p>
                     )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="pada" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Pada Breakdown</CardTitle>
-                  </CardHeader>
-                  <CardContent className="prose prose-invert max-w-none">
-                    <p className="text-muted-foreground">
-                      The four padas (quarters) of {nakshatra.name} will be detailed here once
-                      content is added.
-                    </p>
                   </CardContent>
                 </Card>
               </TabsContent>

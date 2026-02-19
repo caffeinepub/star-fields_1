@@ -1,44 +1,48 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Lunar calendar app with detailed nakshatra/pada tracking, including interpretive descriptions of lunar climate for each pada position",
-  "architectural_notes": [
-    "Pada data structure includes: nakshatra name, degree range, pada number, navamsa sign, title, and full interpretive description text",
-    "Current pada display should show real-time lunar climate interpretation based on Moon's position",
-    "Total of 108 pada descriptions spanning 27 nakshatras need to be stored/accessible"
-  ],
+  "summary": "Star Field Explorer - A Nakshatra tracking app that helps users understand the Moon's movement through 27 lunar mansions in Vedic astrology, providing insight into the emotional and karmic energy of the present moment",
+  "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-create-a-comprehensive-pada-data-structure-containing-all-108-pada-descriptions-4-padas-for-each-of-the-27-nakshatras-with-the-following-fields-nakshatra-name-pada-number-1-4-degree-range-navamsa-sign-title-and-full-interpretive-description-text-as-provided-by-the-user",
-      "title": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with the following fields: nakshatra name, pada number (1-4), degree range, navamsa sign, title, and full interpretive description text as provided by the user",
+      "id": "feature-update-the-application-title-from-star-fields-to-star-field-explorer-in-frontend-index-html",
+      "title": "Update the application title from 'Star Fields' to 'Star Field Explorer' in frontend/index.html",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-extend-the-nakshatraengine-utility-to-calculate-not-just-the-current-nakshatra-but-also-the-specific-pada-1-4-based-on-the-moon-s-precise-degree-position-within-the-nakshatra-s-13-20-range",
-      "title": "Extend the nakshatraEngine utility to calculate not just the current nakshatra but also the specific pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
+      "id": "feature-update-the-header-component-branding-from-star-fields-to-star-field-explorer-in-frontend-src-components-header-tsx",
+      "title": "Update the Header component branding from 'Star Fields' to 'Star Field Explorer' in frontend/src/components/Header.tsx",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-currentnakshatrabanner-component-to-display-the-current-pada-information-including-pada-number-navamsa-sign-title-and-full-interpretive-description-representing-the-current-lunar-climate",
-      "title": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
+      "id": "feature-replace-the-main-page-header-text-in-frontend-src-pages-homepage-tsx-with-track-the-moon-understand-the-moment-as-the-main-heading-followed-by-the-description-a-nakshatra-is-one-of-27-lunar-mansions-sacred-segments-of-the-sky-the-moon-travels-through-each-month-in-vedic-astrology-each-nakshatra-carries-a-distinct-emotional-psychological-and-karmic-tone-as-the-moon-moves-the-feeling-of-time-shifts-this-app-helps-you-recognize-that-rhythm-not-to-predict-fate-but-to-understand-the-energy-shaping-the-present-moment",
+      "title": "Replace the main page header text in frontend/src/pages/HomePage.tsx with: 'Track the Moon. Understand the Moment.' as the main heading, followed by the description: 'A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology. Each Nakshatra carries a distinct emotional, psychological, and karmic tone. As the Moon moves, the feeling of time shifts. This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.'",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-a-visual-indicator-or-emphasis-showing-that-the-displayed-pada-information-represents-the-current-lunar-climate-and-emotional-atmosphere",
-      "title": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
+      "id": "feature-remove-the-expandable-pada-breakdown-section-from-the-currentnakshatrabanner-component-in-frontend-src-components-currentnakshatrabanner-tsx",
+      "title": "Remove the expandable pada breakdown section from the CurrentNakshatraBanner component in frontend/src/components/CurrentNakshatraBanner.tsx",
       "reqIds": [
         "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-pada-section-tab-from-the-nakshatra-detail-page-in-frontend-src-pages-nakshatradetailpage-tsx",
+      "title": "Remove the pada section tab from the Nakshatra detail page in frontend/src/pages/NakshatraDetailPage.tsx",
+      "reqIds": [
+        "REQ-5"
       ],
       "version": 1
     }
@@ -46,12 +50,18 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add detailed pada descriptions to main page current pada section, representing current lunar climate with interpretive text for all 27 nakshatras (108 padas total)",
+      "summary": "Change main page header text to new Nakshatra explanation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Remove pada breakdown and pada section from nakshatra menu",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Star Fields",
+  "projectName": "Star Field Explorer",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

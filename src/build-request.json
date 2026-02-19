@@ -1,98 +1,108 @@
 {
   "kind": "build_request",
-  "title": "Add detailed pada information to current nakshatra display",
-  "projectName": "Star Fields",
+  "title": "Rebrand to Star Field Explorer and update messaging",
+  "projectName": "Star Field Explorer",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with the following fields: nakshatra name, pada number (1-4), degree range, navamsa sign, title, and full interpretive description text as provided by the user",
+      "text": "Update the application title from 'Star Fields' to 'Star Field Explorer' in frontend/index.html",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-latest"
         ],
         "quotes": [
-          "add pada details in the main page (current pada)",
-          "here is the info for each pada"
+          "rebrand the app to be called Star Field Explorer"
         ]
       },
       "acceptanceCriteria": [
-        "Data structure includes all 27 nakshatras with 4 padas each (108 total)",
-        "Each pada entry contains nakshatra name, pada number, degree range, navamsa sign, title, and complete description text",
-        "All provided pada descriptions from Ashwini through Shravana are accurately captured"
+        "The browser tab title displays 'Star Field Explorer'",
+        "The HTML title tag contains 'Star Field Explorer'"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Extend the nakshatraEngine utility to calculate not just the current nakshatra but also the specific pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
+      "text": "Update the Header component branding from 'Star Fields' to 'Star Field Explorer' in frontend/src/components/Header.tsx",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-latest"
         ],
         "quotes": [
-          "current pada info represent the current lunar climate"
+          "rebrand the app to be called Star Field Explorer"
         ]
       },
       "acceptanceCriteria": [
-        "Function calculates current pada by dividing nakshatra degree range into 4 equal parts (3°20' each)",
-        "Returns pada number (1-4) along with current nakshatra",
-        "Calculation updates in real-time with Moon position changes"
+        "The header displays 'Star Field Explorer' as the brand name",
+        "The Moon icon remains visible next to the brand name"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
+      "text": "Replace the main page header text in frontend/src/pages/HomePage.tsx with: 'Track the Moon. Understand the Moment.' as the main heading, followed by the description: 'A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology. Each Nakshatra carries a distinct emotional, psychological, and karmic tone. As the Moon moves, the feeling of time shifts. This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.'",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-latest"
         ],
         "quotes": [
-          "add pada details in the main page (current pada)",
-          "make the current pada info represent the current lunar climate"
+          "change the main page header text to: Track the Moon. Understand the Moment. A Nakshatra is one of 27 lunar mansions..."
         ]
       },
       "acceptanceCriteria": [
-        "Component displays current pada number (1-4) alongside nakshatra name",
-        "Shows navamsa sign and pada title",
-        "Displays full pada description text in a readable format",
-        "Updates automatically when Moon transitions to a new pada",
-        "Visual presentation is consistent with existing banner design"
+        "The main heading displays 'Track the Moon. Understand the Moment.'",
+        "The description text about Nakshatras is displayed below the heading",
+        "The text maintains appropriate typography hierarchy and spacing"
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
+      "text": "Remove the expandable pada breakdown section from the CurrentNakshatraBanner component in frontend/src/components/CurrentNakshatraBanner.tsx",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-latest"
         ],
         "quotes": [
-          "make the current pada info represent the current lunar climate"
+          "take out the pada breakdown"
         ]
       },
       "acceptanceCriteria": [
-        "Clear visual treatment distinguishes current pada as representing present lunar climate",
-        "Language or labeling emphasizes real-time lunar influence",
-        "Design maintains cosmic/astronomical aesthetic of existing interface"
+        "The CurrentNakshatraBanner no longer displays pada details",
+        "The expand/collapse functionality for pada information is removed",
+        "The banner still displays the current Nakshatra name and essential information"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Remove the pada section tab from the Nakshatra detail page in frontend/src/pages/NakshatraDetailPage.tsx",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "take out the pada section in the nakshatra menu"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Nakshatra detail page no longer displays a pada tab or section",
+        "Other tabs/sections (Overview, Characteristics, etc.) remain functional",
+        "The page layout adjusts appropriately without the pada section"
       ]
     }
   ],
   "constraints": [
-    "Do not modify the backend - all pada calculations and data should live in the frontend",
-    "Preserve the existing CurrentNakshatraBanner component structure and styling approach",
-    "Maintain the 5-minute refresh interval for nakshatra calculations",
-    "Do not alter the existing nakshatra grid or detail pages"
+    "Preserve the existing dark cosmic theme and color scheme",
+    "Maintain the Moon icon in the header",
+    "Keep the NakshatraGrid and other existing functionality intact"
   ],
   "nonGoals": [
-    "Adding pada information to individual nakshatra detail pages",
-    "Creating admin functionality to edit pada descriptions",
-    "Storing pada data in the backend canister",
-    "Adding pada filtering or search functionality",
-    "Creating separate pages for pada information"
+    "Changing the backend Nakshatra data structure",
+    "Modifying the nakshatra calculation engine",
+    "Altering the Admin page functionality",
+    "Removing pada data from the codebase (only remove from UI)"
   ],
   "imageRequirements": {
     "required": [],
