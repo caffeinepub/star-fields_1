@@ -3,17 +3,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Moon, Sparkles } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ArrowLeft, Moon, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { getNakshatraBySlug } from '../utils/nakshatraEngine';
 import { useCurrentNakshatra } from '../hooks/useCurrentNakshatra';
-import { useNakshatraByName } from '../hooks/useQueries';
+import { useNakshatraByName, useGetNakshatraImage } from '../hooks/useQueries';
+import { PADA_DATA } from '../utils/padaData';
 
 export default function NakshatraDetailPage() {
   const { slug, section } = useParams({ strict: false });
   const nakshatra = getNakshatraBySlug(slug as string);
   const currentNakshatra = useCurrentNakshatra();
   
-  const { data: backendData } = useNakshatraByName(nakshatra?.name || '');
+  const { data: backendData, error, isLoading, isFetching } = useNakshatraByName(nakshatra?.name || '');
+  const { data: imageUrl, isLoading: imageLoading } = useGetNakshatraImage(backendData?.imageId);
 
   if (!nakshatra) {
     return (
@@ -27,7 +31,37 @@ export default function NakshatraDetailPage() {
   }
 
   const isCurrent = nakshatra.index === currentNakshatra.index;
-  const imageUrl = backendData?.imageUrl || '';
+
+  // Check if this is an initialization error (retrying)
+  const isInitializing = (isLoading || (isFetching && !backendData)) && !error;
+  
+  // Only show error if it's a genuine failure after all retries
+  const showError = error && !isLoading && !isFetching;
+
+  // Get pada data - prioritize backend data, fallback to padaData.ts
+  const getPadaInfo = (padaNumber: 1 | 2 | 3 | 4) => {
+    const backendPada = backendData?.[`pada${padaNumber}` as keyof typeof backendData];
+    
+    // Check if backend has custom pada data (not default/empty)
+    if (backendPada && typeof backendPada === 'object' && 'title' in backendPada && 'description' in backendPada) {
+      const pada = backendPada as { title: string; description: string };
+      if (pada.title && pada.description && pada.title !== `Pada ${padaNumber}` && pada.description !== `Description for Pada ${padaNumber}`) {
+        return pada;
+      }
+    }
+    
+    // Fallback to padaData.ts
+    const fallbackPada = PADA_DATA.find(
+      p => p.nakshatraName === nakshatra.name && p.padaNumber === padaNumber
+    );
+    
+    return fallbackPada ? {
+      title: fallbackPada.title,
+      description: fallbackPada.description,
+      degreeRange: fallbackPada.degreeRange,
+      navamsaSign: fallbackPada.navamsaSign
+    } : null;
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -38,6 +72,26 @@ export default function NakshatraDetailPage() {
             Back to All Nakshatras
           </Button>
         </Link>
+
+        {isInitializing && (
+          <Alert className="border-primary/50 bg-primary/5">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <AlertTitle>Loading Nakshatra Details</AlertTitle>
+            <AlertDescription>
+              Initializing backend canister, please wait...
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {showError && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Unable to Load Details</AlertTitle>
+            <AlertDescription>
+              {error instanceof Error ? error.message : 'Failed to load Nakshatra details from the backend.'}
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid md:grid-cols-[300px_1fr] gap-6">
           <div className="space-y-4">
@@ -51,7 +105,9 @@ export default function NakshatraDetailPage() {
                     </Badge>
                   </div>
                 )}
-                {imageUrl ? (
+                {imageLoading ? (
+                  <Skeleton className="absolute inset-0 w-full h-full" />
+                ) : imageUrl ? (
                   <img
                     src={imageUrl}
                     alt={nakshatra.name}
@@ -141,20 +197,20 @@ export default function NakshatraDetailPage() {
                     Traits
                   </Link>
                 </TabsTrigger>
+                <TabsTrigger value="pada" asChild>
+                  <Link
+                    to="/nakshatras/$slug/$section"
+                    params={{ slug: nakshatra.slug, section: 'pada' }}
+                  >
+                    Pada
+                  </Link>
+                </TabsTrigger>
                 <TabsTrigger value="mythology" asChild>
                   <Link
                     to="/nakshatras/$slug/$section"
                     params={{ slug: nakshatra.slug, section: 'mythology' }}
                   >
                     Mythology
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="ruler" asChild>
-                  <Link
-                    to="/nakshatras/$slug/$section"
-                    params={{ slug: nakshatra.slug, section: 'ruler' }}
-                  >
-                    Ruler
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="symbolism" asChild>
@@ -170,51 +226,75 @@ export default function NakshatraDetailPage() {
               <TabsContent value="traits" className="mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Traits & Characteristics</CardTitle>
+                    <CardTitle>Characteristics</CardTitle>
                   </CardHeader>
-                  <CardContent className="prose prose-invert max-w-none">
-                    {backendData?.description ? (
-                      <div className="space-y-4">
-                        <p>{backendData.description}</p>
-                        {backendData.characteristics && (
-                          <div>
-                            <h3 className="text-lg font-semibold mb-2">Key Characteristics</h3>
-                            <p className="text-muted-foreground">{backendData.characteristics}</p>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
+                  <CardContent className="space-y-4">
+                    <div>
+                      <h3 className="font-semibold mb-2">Description</h3>
                       <p className="text-muted-foreground">
-                        Detailed traits and characteristics for {nakshatra.name} will be available
-                        once the admin adds content through the dashboard.
+                        {backendData?.description || 'Loading description...'}
                       </p>
-                    )}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Key Traits</h3>
+                      <p className="text-muted-foreground">
+                        {backendData?.characteristics || 'Loading characteristics...'}
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="pada" className="mt-6 space-y-4">
+                {[1, 2, 3, 4].map((padaNum) => {
+                  const padaInfo = getPadaInfo(padaNum as 1 | 2 | 3 | 4);
+                  if (!padaInfo) return null;
+
+                  return (
+                    <Card key={padaNum}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center justify-between">
+                          <span>Pada {padaNum}</span>
+                          {'navamsaSign' in padaInfo && padaInfo.navamsaSign && (
+                            <Badge variant="outline">{padaInfo.navamsaSign}</Badge>
+                          )}
+                        </CardTitle>
+                        {'degreeRange' in padaInfo && padaInfo.degreeRange && (
+                          <p className="text-sm text-muted-foreground">{padaInfo.degreeRange}</p>
+                        )}
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div>
+                          <h4 className="font-semibold text-sm mb-1">{padaInfo.title}</h4>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {padaInfo.description}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </TabsContent>
 
               <TabsContent value="mythology" className="mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Mythology & Stories</CardTitle>
+                    <CardTitle>Mythology & Deity</CardTitle>
                   </CardHeader>
-                  <CardContent className="prose prose-invert max-w-none">
-                    <p className="text-muted-foreground">
-                      Ancient stories and mythology related to {nakshatra.name} will appear here.
-                    </p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="ruler" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Planetary Ruler</CardTitle>
-                  </CardHeader>
-                  <CardContent className="prose prose-invert max-w-none">
-                    <p className="text-muted-foreground">
-                      Information about the planetary ruler of {nakshatra.name} will be shown here.
-                    </p>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <h3 className="font-semibold mb-2">Ruling Deity</h3>
+                      <p className="text-muted-foreground">
+                        {backendData?.rulingDeity || 'Loading deity information...'}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Mythological Significance</h3>
+                      <p className="text-muted-foreground">
+                        The deity {backendData?.rulingDeity} governs this nakshatra, bringing their unique
+                        qualities and blessings to those born under this lunar mansion.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -222,26 +302,22 @@ export default function NakshatraDetailPage() {
               <TabsContent value="symbolism" className="mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Symbolism & Deity</CardTitle>
+                    <CardTitle>Symbolism</CardTitle>
                   </CardHeader>
-                  <CardContent className="prose prose-invert max-w-none">
-                    {backendData ? (
-                      <div className="space-y-4">
-                        <div>
-                          <h3 className="text-lg font-semibold mb-2">Ruling Deity</h3>
-                          <p className="text-muted-foreground">{backendData.rulingDeity}</p>
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold mb-2">Symbol</h3>
-                          <p className="text-muted-foreground">{backendData.symbol}</p>
-                        </div>
-                      </div>
-                    ) : (
+                  <CardContent className="space-y-4">
+                    <div>
+                      <h3 className="font-semibold mb-2">Symbol</h3>
                       <p className="text-muted-foreground">
-                        Symbolic meanings and deity associations for {nakshatra.name} will be
-                        described here.
+                        {backendData?.symbol || 'Loading symbol information...'}
                       </p>
-                    )}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Symbolic Meaning</h3>
+                      <p className="text-muted-foreground">
+                        The symbol of {backendData?.symbol} represents the core essence and energy
+                        of this nakshatra, reflecting its deeper spiritual significance.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>

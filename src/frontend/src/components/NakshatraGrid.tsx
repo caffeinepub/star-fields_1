@@ -1,25 +1,73 @@
 import { Link } from '@tanstack/react-router';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Sparkles, Loader2 } from 'lucide-react';
 import { useCurrentNakshatra } from '../hooks/useCurrentNakshatra';
-import { useNakshatras } from '../hooks/useQueries';
+import { useNakshatras, useGetNakshatraImage } from '../hooks/useQueries';
 import { NAKSHATRAS } from '../utils/nakshatraEngine';
+
+function NakshatraCardImage({ imageId, nakshatraName, nakshatraIndex }: { imageId?: string; nakshatraName: string; nakshatraIndex: number }) {
+  const { data: imageUrl, isLoading } = useGetNakshatraImage(imageId);
+
+  if (isLoading) {
+    return <Skeleton className="absolute inset-0 w-full h-full" />;
+  }
+
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        alt={nakshatraName}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="text-center p-6">
+        <div className="text-6xl font-bold text-primary/20 mb-2">
+          {nakshatraIndex}
+        </div>
+        <div className="text-sm text-muted-foreground">
+          {NAKSHATRAS[nakshatraIndex - 1]?.startDegree.toFixed(1)}° - {NAKSHATRAS[nakshatraIndex - 1]?.endDegree.toFixed(1)}°
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function NakshatraGrid() {
   const currentNakshatra = useCurrentNakshatra();
-  const { data: backendNakshatras } = useNakshatras();
+  const { data: backendNakshatras, isLoading, isFetching } = useNakshatras();
 
-  const getImageUrl = (nakshatraName: string) => {
-    const backendData = backendNakshatras?.find(n => n.name === nakshatraName);
-    return backendData?.imageUrl || '';
+  const getImageId = (nakshatraName: string): string | undefined => {
+    if (!backendNakshatras || backendNakshatras.length === 0) {
+      return undefined;
+    }
+    const backendData = backendNakshatras.find(n => n.name === nakshatraName);
+    return backendData?.imageId;
   };
+
+  // Show loading state during initial fetch or retries
+  if (isLoading || (isFetching && !backendNakshatras)) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 space-y-4">
+        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+        <div className="text-center space-y-2">
+          <p className="text-lg font-medium">Initializing backend canister...</p>
+          <p className="text-sm text-muted-foreground">This may take a moment on first load</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {NAKSHATRAS.map((nakshatra) => {
         const isCurrent = nakshatra.index === currentNakshatra.index;
-        const imageUrl = getImageUrl(nakshatra.name);
+        const imageId = getImageId(nakshatra.name);
 
         return (
           <Link
@@ -44,24 +92,11 @@ export default function NakshatraGrid() {
                     </Badge>
                   </div>
                 )}
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt={nakshatra.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center p-6">
-                      <div className="text-6xl font-bold text-primary/20 mb-2">
-                        {nakshatra.index}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {nakshatra.startDegree.toFixed(1)}° - {nakshatra.endDegree.toFixed(1)}°
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <NakshatraCardImage 
+                  imageId={imageId} 
+                  nakshatraName={nakshatra.name}
+                  nakshatraIndex={nakshatra.index}
+                />
                 {isCurrent && (
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent animate-pulse" />
                 )}

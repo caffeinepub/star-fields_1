@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Rebrand the application to "Star Field Explorer" and update messaging to focus on understanding lunar mansions and the present moment.
+**Goal:** Fix the backend canister initialization issue causing "Unable to Load Nakshatras" errors and improve frontend error handling during startup.
 
 **Planned changes:**
-- Update application title from "Star Fields" to "Star Field Explorer" in browser tab and header
-- Replace main page header text with "Track the Moon. Understand the Moment." and updated Nakshatra explanation
-- Remove pada breakdown section from the current Nakshatra banner
-- Remove pada tab from the Nakshatra detail page
+- Investigate and resolve backend canister initialization problems in main.mo to ensure proper startup and query responses
+- Add retry logic and improved loading states in useQueries.ts to handle canister initialization delays gracefully
+- Verify default Nakshatras (Ashwini and Bharani) initialize correctly and are immediately retrievable after deployment
 
-**User-visible outcome:** Users will see the rebranded "Star Field Explorer" name throughout the app, read updated messaging that emphasizes understanding the present moment through Nakshatras, and experience a simplified interface without pada details.
+**User-visible outcome:** Users will see a loading state during canister initialization instead of error messages, and the Nakshatra grid will load successfully without "service temporarily unavailable" errors.

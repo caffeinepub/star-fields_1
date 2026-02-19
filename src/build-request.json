@@ -1,108 +1,71 @@
 {
   "kind": "build_request",
-  "title": "Rebrand to Star Field Explorer and update messaging",
+  "title": "Fix Nakshatra Loading Error - Backend Canister Initialization",
   "projectName": "Star Field Explorer",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the application title from 'Star Fields' to 'Star Field Explorer' in frontend/index.html",
-      "target": "frontend",
+      "text": "Investigate and fix the backend canister initialization issue causing 'Unable to Load Nakshatras' error. Ensure the main.mo actor initializes properly and responds to frontend queries without timing out or showing 'service temporarily unavailable' errors.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-4"
         ],
         "quotes": [
-          "rebrand the app to be called Star Field Explorer"
+          "Unable to Load Nakshatras",
+          "The service is temporarily unavailable. The backend canister may be stopped or initializing."
         ]
       },
       "acceptanceCriteria": [
-        "The browser tab title displays 'Star Field Explorer'",
-        "The HTML title tag contains 'Star Field Explorer'"
+        "Backend canister starts successfully without initialization errors",
+        "Frontend can fetch Nakshatra data immediately after deployment",
+        "No 'service temporarily unavailable' errors appear when loading the homepage or Nakshatra grid"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the Header component branding from 'Star Fields' to 'Star Field Explorer' in frontend/src/components/Header.tsx",
+      "text": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-4"
         ],
         "quotes": [
-          "rebrand the app to be called Star Field Explorer"
+          "The service is temporarily unavailable. The backend canister may be stopped or initializing. Please try again in a moment."
         ]
       },
       "acceptanceCriteria": [
-        "The header displays 'Star Field Explorer' as the brand name",
-        "The Moon icon remains visible next to the brand name"
+        "Frontend shows a loading spinner or initialization message during canister startup",
+        "Queries automatically retry after initialization delays without user intervention",
+        "Error messages only appear for genuine failures, not initialization delays"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Replace the main page header text in frontend/src/pages/HomePage.tsx with: 'Track the Moon. Understand the Moment.' as the main heading, followed by the description: 'A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology. Each Nakshatra carries a distinct emotional, psychological, and karmic tone. As the Moon moves, the feeling of time shifts. This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.'",
-      "target": "frontend",
+      "text": "Verify that the default Nakshatras (Ashwini and Bharani) are properly initialized in main.mo during canister deployment and can be retrieved immediately after startup.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "change the main page header text to: Track the Moon. Understand the Moment. A Nakshatra is one of 27 lunar mansions..."
+          "msg-4"
         ]
       },
       "acceptanceCriteria": [
-        "The main heading displays 'Track the Moon. Understand the Moment.'",
-        "The description text about Nakshatras is displayed below the heading",
-        "The text maintains appropriate typography hierarchy and spacing"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Remove the expandable pada breakdown section from the CurrentNakshatraBanner component in frontend/src/components/CurrentNakshatraBanner.tsx",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "take out the pada breakdown"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The CurrentNakshatraBanner no longer displays pada details",
-        "The expand/collapse functionality for pada information is removed",
-        "The banner still displays the current Nakshatra name and essential information"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Remove the pada section tab from the Nakshatra detail page in frontend/src/pages/NakshatraDetailPage.tsx",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "take out the pada section in the nakshatra menu"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The Nakshatra detail page no longer displays a pada tab or section",
-        "Other tabs/sections (Overview, Characteristics, etc.) remain functional",
-        "The page layout adjusts appropriately without the pada section"
+        "Default Nakshatras are consistently present after fresh deployment",
+        "getNakshatras() query returns at least 2 default entries immediately",
+        "No stable memory corruption or state initialization issues"
       ]
     }
   ],
   "constraints": [
-    "Preserve the existing dark cosmic theme and color scheme",
-    "Maintain the Moon icon in the header",
-    "Keep the NakshatraGrid and other existing functionality intact"
+    "Do not change the single-actor architecture in main.mo",
+    "Preserve existing Nakshatra data structure and API interfaces",
+    "Maintain compatibility with current frontend query hooks"
   ],
   "nonGoals": [
-    "Changing the backend Nakshatra data structure",
-    "Modifying the nakshatra calculation engine",
-    "Altering the Admin page functionality",
-    "Removing pada data from the codebase (only remove from UI)"
+    "Migrating to multi-canister architecture",
+    "Adding new Nakshatra features or data fields",
+    "Redesigning the error UI components"
   ],
   "imageRequirements": {
     "required": [],

@@ -14,10 +14,19 @@ export interface Nakshatra {
   'rulingDeity' : string,
   'name' : string,
   'description' : string,
-  'imageUrl' : string,
+  'pada1' : PadaInfo,
+  'pada2' : PadaInfo,
+  'pada3' : PadaInfo,
+  'pada4' : PadaInfo,
+  'imageId' : [] | [string],
   'characteristics' : string,
   'symbol' : string,
 }
+export interface PadaInfo { 'title' : string, 'description' : string }
+export interface UserProfile { 'name' : string }
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
 export interface _CaffeineStorageCreateCertificateResult {
   'method' : string,
   'blob_hash' : string,
@@ -45,14 +54,24 @@ export interface _SERVICE {
     _CaffeineStorageRefillResult
   >,
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'createNakshatra' : ActorMethod<[Nakshatra], boolean>,
+  'deleteImage' : ActorMethod<[string], boolean>,
   'deleteNakshatra' : ActorMethod<[string], boolean>,
   'getAllNakshatras' : ActorMethod<[], Array<Nakshatra>>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getImage' : ActorMethod<[string], [] | [Uint8Array]>,
   'getNakshatraByNumber' : ActorMethod<[bigint], [] | [Nakshatra]>,
-  'initialize' : ActorMethod<[], undefined>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
   'readNakshatra' : ActorMethod<[string], [] | [Nakshatra]>,
+  'replaceNakshatraImage' : ActorMethod<[string, Uint8Array], undefined>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'searchNakshatras' : ActorMethod<[string], Array<Nakshatra>>,
   'updateNakshatra' : ActorMethod<[Nakshatra], boolean>,
+  'uploadImage' : ActorMethod<[Uint8Array], string>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

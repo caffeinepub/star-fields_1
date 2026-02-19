@@ -6,7 +6,7 @@ import { Upload, X } from 'lucide-react';
 
 interface NakshatraImageUploadProps {
   currentImageUrl?: string;
-  onImageChange: (imageUrl: string) => void;
+  onImageChange: (imageData: Uint8Array | null) => void;
   onError?: (error: string) => void;
 }
 
@@ -68,27 +68,25 @@ export default function NakshatraImageUpload({
         });
       }, 100);
 
-      // Convert to data URL for preview and storage
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const dataUrl = event.target?.result as string;
-        setUploadProgress(100);
-        clearInterval(progressInterval);
-        setPreviewUrl(dataUrl);
-        onImageChange(dataUrl);
+      // Convert file to Uint8Array
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
+
+      // Create preview URL
+      const previewBlobUrl = URL.createObjectURL(file);
+      
+      setUploadProgress(100);
+      clearInterval(progressInterval);
+      setPreviewUrl(previewBlobUrl);
+      onImageChange(uint8Array);
+      
+      setTimeout(() => {
         setIsUploading(false);
         setUploadProgress(0);
-      };
-      reader.onerror = () => {
-        clearInterval(progressInterval);
-        onError?.('Failed to read image file');
-        setIsUploading(false);
-        setUploadProgress(0);
-      };
-      reader.readAsDataURL(file);
+      }, 500);
     } catch (error) {
       console.error('Upload error:', error);
-      onError?.('Failed to upload image');
+      onError?.('Failed to process image file');
       setIsUploading(false);
       setUploadProgress(0);
     }
@@ -96,7 +94,7 @@ export default function NakshatraImageUpload({
 
   const handleRemove = () => {
     setPreviewUrl(null);
-    onImageChange('');
+    onImageChange(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }

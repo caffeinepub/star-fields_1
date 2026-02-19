@@ -1,16 +1,37 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T07:21:29.079Z",
-  "summary": "All 5 requirements have been successfully implemented. The application has been rebranded from 'Star Fields' to 'Star Field Explorer' with updated messaging, and pada-related UI elements have been removed as requested.",
-  "missing_requirements": [],
+  "generatedAt": "2026-02-19T20:11:57.389Z",
+  "summary": "The diff implements retry logic and initialization-aware UI for frontend errors (REQ-2), but does not provide evidence of backend canister initialization fixes (REQ-1) or default Nakshatra data initialization (REQ-3). The migration.mo file appears to be a stub with no initialization logic.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Investigate and fix the backend canister initialization issue causing 'Unable to Load Nakshatras' error. Ensure the main.mo actor initializes properly and responds to frontend queries without timing out.",
+      "reason": "No evidence of backend initialization fixes in main.mo. The migration.mo file contains only a stub function that returns the actor unchanged. No initialization logic, default data population, or startup sequence improvements are visible in the diff.",
+      "evidence": [
+        "backend/migration.mo",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Verify that the default Nakshatras (Ashwini and Bharani) are properly initialized in main.mo during canister deployment and can be retrieved immediately after startup.",
+      "reason": "No evidence of default Nakshatra initialization code. The main.mo file shows an empty nakshatraMap with no default data population. The migration.run() integration exists but the migration module does nothing.",
+      "evidence": [
+        "backend/main.mo",
+        "backend/migration.mo"
+      ]
+    }
+  ],
   "hallucinated_features": [],
-  "confidence": 0.95,
+  "confidence": 0.85,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.html",
-    "frontend/src/components/CurrentNakshatraBanner.tsx",
-    "frontend/src/components/Header.tsx",
+    "frontend/src/components/NakshatraGrid.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminPage.tsx",
     "frontend/src/pages/HomePage.tsx",
     "frontend/src/pages/NakshatraDetailPage.tsx",
     "project_state.json"

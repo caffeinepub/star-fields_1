@@ -6,6 +6,7 @@ import NakshatraDetailPage from './pages/NakshatraDetailPage';
 import AdminPage from './pages/AdminPage';
 import AdminEditPage from './pages/AdminEditPage';
 import Layout from './components/Layout';
+import AdminGuard from './components/AdminGuard';
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -32,13 +33,21 @@ const nakshatraDetailRoute = createRoute({
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admin',
-  component: () => <AdminPage />,
+  component: () => (
+    <AdminGuard>
+      <AdminPage />
+    </AdminGuard>
+  ),
 });
 
 const adminEditRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admin/nakshatras/$id',
-  component: () => <AdminEditPage />,
+  component: () => (
+    <AdminGuard>
+      <AdminEditPage />
+    </AdminGuard>
+  ),
 });
 
 const routeTree = rootRoute.addChildren([

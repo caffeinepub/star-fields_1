@@ -2,85 +2,13 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-application-title-from-star-fields-to-star-field-explorer-in-frontend-index-html",
-      "featureTitle": "Update the application title from 'Star Fields' to 'Star Field Explorer' in frontend/index.html",
+      "featureId": "feature-add-proper-error-handling-and-retry-logic-in-usequeries-ts-to-gracefully-handle-canister-initialization-delays-display-user-friendly-loading-states-while-the-backend-initializes-instead-of-showing-error-messages",
+      "featureTitle": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
       "files": [
-        "frontend/index.html"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-header-component-branding-from-star-fields-to-star-field-explorer-in-frontend-src-components-header-tsx",
-      "featureTitle": "Update the Header component branding from 'Star Fields' to 'Star Field Explorer' in frontend/src/components/Header.tsx",
-      "files": [
-        "frontend/src/components/Header.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-replace-the-main-page-header-text-in-frontend-src-pages-homepage-tsx-with-track-the-moon-understand-the-moment-as-the-main-heading-followed-by-the-description-a-nakshatra-is-one-of-27-lunar-mansions-sacred-segments-of-the-sky-the-moon-travels-through-each-month-in-vedic-astrology-each-nakshatra-carries-a-distinct-emotional-psychological-and-karmic-tone-as-the-moon-moves-the-feeling-of-time-shifts-this-app-helps-you-recognize-that-rhythm-not-to-predict-fate-but-to-understand-the-energy-shaping-the-present-moment",
-      "featureTitle": "Replace the main page header text in frontend/src/pages/HomePage.tsx with: 'Track the Moon. Understand the Moment.' as the main heading, followed by the description: 'A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology. Each Nakshatra carries a distinct emotional, psychological, and karmic tone. As the Moon moves, the feeling of time shifts. This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.'",
-      "files": [
-        "frontend/src/pages/HomePage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-expandable-pada-breakdown-section-from-the-currentnakshatrabanner-component-in-frontend-src-components-currentnakshatrabanner-tsx",
-      "featureTitle": "Remove the expandable pada breakdown section from the CurrentNakshatraBanner component in frontend/src/components/CurrentNakshatraBanner.tsx",
-      "files": [
-        "frontend/src/components/CurrentNakshatraBanner.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-pada-section-tab-from-the-nakshatra-detail-page-in-frontend-src-pages-nakshatradetailpage-tsx",
-      "featureTitle": "Remove the pada section tab from the Nakshatra detail page in frontend/src/pages/NakshatraDetailPage.tsx",
-      "files": [
+        "frontend/src/components/NakshatraGrid.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
         "frontend/src/pages/NakshatraDetailPage.tsx"
       ],
       "components": [
@@ -89,10 +17,11 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
+        "blob-storage@4.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-5"
+        "REQ-2"
       ],
       "confidence": "high"
     }

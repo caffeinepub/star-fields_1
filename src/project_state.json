@@ -1,48 +1,18 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Star Field Explorer - A Nakshatra tracking app that helps users understand the Moon's movement through 27 lunar mansions in Vedic astrology, providing insight into the emotional and karmic energy of the present moment",
+  "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "Unable to load Nakshatras - backend canister may be stopped or initializing"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-application-title-from-star-fields-to-star-field-explorer-in-frontend-index-html",
-      "title": "Update the application title from 'Star Fields' to 'Star Field Explorer' in frontend/index.html",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-header-component-branding-from-star-fields-to-star-field-explorer-in-frontend-src-components-header-tsx",
-      "title": "Update the Header component branding from 'Star Fields' to 'Star Field Explorer' in frontend/src/components/Header.tsx",
+      "id": "feature-add-proper-error-handling-and-retry-logic-in-usequeries-ts-to-gracefully-handle-canister-initialization-delays-display-user-friendly-loading-states-while-the-backend-initializes-instead-of-showing-error-messages",
+      "title": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
       "reqIds": [
         "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-replace-the-main-page-header-text-in-frontend-src-pages-homepage-tsx-with-track-the-moon-understand-the-moment-as-the-main-heading-followed-by-the-description-a-nakshatra-is-one-of-27-lunar-mansions-sacred-segments-of-the-sky-the-moon-travels-through-each-month-in-vedic-astrology-each-nakshatra-carries-a-distinct-emotional-psychological-and-karmic-tone-as-the-moon-moves-the-feeling-of-time-shifts-this-app-helps-you-recognize-that-rhythm-not-to-predict-fate-but-to-understand-the-energy-shaping-the-present-moment",
-      "title": "Replace the main page header text in frontend/src/pages/HomePage.tsx with: 'Track the Moon. Understand the Moment.' as the main heading, followed by the description: 'A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology. Each Nakshatra carries a distinct emotional, psychological, and karmic tone. As the Moon moves, the feeling of time shifts. This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.'",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-the-expandable-pada-breakdown-section-from-the-currentnakshatrabanner-component-in-frontend-src-components-currentnakshatrabanner-tsx",
-      "title": "Remove the expandable pada breakdown section from the CurrentNakshatraBanner component in frontend/src/components/CurrentNakshatraBanner.tsx",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-the-pada-section-tab-from-the-nakshatra-detail-page-in-frontend-src-pages-nakshatradetailpage-tsx",
-      "title": "Remove the pada section tab from the Nakshatra detail page in frontend/src/pages/NakshatraDetailPage.tsx",
-      "reqIds": [
-        "REQ-5"
       ],
       "version": 1
     }
@@ -50,14 +20,18 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Change main page header text to new Nakshatra explanation",
-      "reqIds": [],
+      "summary": "Investigate and fix the backend canister initialization issue causing 'Unable to Load Nakshatras' error. Ensure the main.mo actor initializes properly and responds to frontend queries without timing out or showing 'service temporarily unavailable' errors.",
+      "reqIds": [
+        "REQ-1"
+      ],
       "status": "pending"
     },
     {
-      "id": "AR-2",
-      "summary": "Remove pada breakdown and pada section from nakshatra menu",
-      "reqIds": [],
+      "id": "AR-3",
+      "summary": "Verify that the default Nakshatras (Ashwini and Bharani) are properly initialized in main.mo during canister deployment and can be retrieved immediately after startup.",
+      "reqIds": [
+        "REQ-3"
+      ],
       "status": "pending"
     }
   ],

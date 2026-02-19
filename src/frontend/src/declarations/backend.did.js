@@ -19,14 +19,28 @@ export const _CaffeineStorageRefillResult = IDL.Record({
   'success' : IDL.Opt(IDL.Bool),
   'topped_up_amount' : IDL.Opt(IDL.Nat),
 });
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const PadaInfo = IDL.Record({
+  'title' : IDL.Text,
+  'description' : IDL.Text,
+});
 export const Nakshatra = IDL.Record({
   'rulingDeity' : IDL.Text,
   'name' : IDL.Text,
   'description' : IDL.Text,
-  'imageUrl' : IDL.Text,
+  'pada1' : PadaInfo,
+  'pada2' : PadaInfo,
+  'pada3' : PadaInfo,
+  'pada4' : PadaInfo,
+  'imageId' : IDL.Opt(IDL.Text),
   'characteristics' : IDL.Text,
   'symbol' : IDL.Text,
 });
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -55,14 +69,28 @@ export const idlService = IDL.Service({
       [],
     ),
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'createNakshatra' : IDL.Func([Nakshatra], [IDL.Bool], []),
+  'deleteImage' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'deleteNakshatra' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'getAllNakshatras' : IDL.Func([], [IDL.Vec(Nakshatra)], ['query']),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getImage' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Vec(IDL.Nat8))], ['query']),
   'getNakshatraByNumber' : IDL.Func([IDL.Nat], [IDL.Opt(Nakshatra)], ['query']),
-  'initialize' : IDL.Func([], [], []),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'readNakshatra' : IDL.Func([IDL.Text], [IDL.Opt(Nakshatra)], ['query']),
+  'replaceNakshatraImage' : IDL.Func([IDL.Text, IDL.Vec(IDL.Nat8)], [], []),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'searchNakshatras' : IDL.Func([IDL.Text], [IDL.Vec(Nakshatra)], ['query']),
   'updateNakshatra' : IDL.Func([Nakshatra], [IDL.Bool], []),
+  'uploadImage' : IDL.Func([IDL.Vec(IDL.Nat8)], [IDL.Text], []),
 });
 
 export const idlInitArgs = [];
@@ -79,14 +107,25 @@ export const idlFactory = ({ IDL }) => {
     'success' : IDL.Opt(IDL.Bool),
     'topped_up_amount' : IDL.Opt(IDL.Nat),
   });
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const PadaInfo = IDL.Record({ 'title' : IDL.Text, 'description' : IDL.Text });
   const Nakshatra = IDL.Record({
     'rulingDeity' : IDL.Text,
     'name' : IDL.Text,
     'description' : IDL.Text,
-    'imageUrl' : IDL.Text,
+    'pada1' : PadaInfo,
+    'pada2' : PadaInfo,
+    'pada3' : PadaInfo,
+    'pada4' : PadaInfo,
+    'imageId' : IDL.Opt(IDL.Text),
     'characteristics' : IDL.Text,
     'symbol' : IDL.Text,
   });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -115,18 +154,32 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'createNakshatra' : IDL.Func([Nakshatra], [IDL.Bool], []),
+    'deleteImage' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'deleteNakshatra' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'getAllNakshatras' : IDL.Func([], [IDL.Vec(Nakshatra)], ['query']),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getImage' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Vec(IDL.Nat8))], ['query']),
     'getNakshatraByNumber' : IDL.Func(
         [IDL.Nat],
         [IDL.Opt(Nakshatra)],
         ['query'],
       ),
-    'initialize' : IDL.Func([], [], []),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'readNakshatra' : IDL.Func([IDL.Text], [IDL.Opt(Nakshatra)], ['query']),
+    'replaceNakshatraImage' : IDL.Func([IDL.Text, IDL.Vec(IDL.Nat8)], [], []),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'searchNakshatras' : IDL.Func([IDL.Text], [IDL.Vec(Nakshatra)], ['query']),
     'updateNakshatra' : IDL.Func([Nakshatra], [IDL.Bool], []),
+    'uploadImage' : IDL.Func([IDL.Vec(IDL.Nat8)], [IDL.Text], []),
   });
 };
 

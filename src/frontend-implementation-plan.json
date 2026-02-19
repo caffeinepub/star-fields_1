@@ -1,83 +1,46 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Rebrand to Star Field Explorer and update messaging",
+  "title": "Fix Nakshatra Loading Error - Frontend Error Handling & Retry Logic",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Update application title from 'Star Fields' to 'Star Field Explorer' in the HTML entry point",
-      "acceptanceCriteria": [
-        "The browser tab title displays 'Star Field Explorer'",
-        "The HTML title tag contains 'Star Field Explorer'"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/index.html",
-          "operation": "modify",
-          "description": "Change the <title> tag content from 'Star Fields' to 'Star Field Explorer' to update the browser tab title"
-        }
-      ]
-    },
-    {
       "id": "REQ-2",
-      "summary": "Update Header component branding from 'Star Fields' to 'Star Field Explorer'",
+      "summary": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays with user-friendly loading states",
       "acceptanceCriteria": [
-        "The header displays 'Star Field Explorer' as the brand name",
-        "The Moon icon remains visible next to the brand name"
+        "Frontend shows a loading spinner or initialization message during canister startup",
+        "Queries automatically retry after initialization delays without user intervention",
+        "Error messages only appear for genuine failures, not initialization delays"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Header.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Update the branding text from 'Star Fields' to 'Star Field Explorer' while preserving the Moon icon and existing header structure"
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Replace main page header text with new messaging about tracking the Moon and understanding Nakshatras",
-      "acceptanceCriteria": [
-        "The main heading displays 'Track the Moon. Understand the Moment.'",
-        "The description text about Nakshatras is displayed below the heading",
-        "The text maintains appropriate typography hierarchy and spacing"
-      ],
-      "file_operations": [
+          "description": "Enhance error transformation to distinguish between initialization delays and genuine failures. Add retry logic with exponential backoff for 'service temporarily unavailable' errors. Configure retries (e.g., retry: 5, retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)) to handle canister initialization gracefully. Transform 'stopped or initializing' errors into non-error loading states instead of displaying error messages."
+        },
+        {
+          "path": "frontend/src/components/NakshatraGrid.tsx",
+          "operation": "modify",
+          "description": "Update loading and error state handling to display a friendly initialization message when the backend is starting up. Show a loading spinner with text like 'Initializing backend canister...' during initialization delays instead of error messages. Only display error UI for genuine query failures after all retries are exhausted."
+        },
         {
           "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Replace the existing header text with 'Track the Moon. Understand the Moment.' as the main heading (h1), followed by a description paragraph explaining Nakshatras: 'A Nakshatra is one of 27 lunar mansions — sacred segments of the sky the Moon travels through each month in Vedic astrology. Each Nakshatra carries a distinct emotional, psychological, and karmic tone. As the Moon moves, the feeling of time shifts. This app helps you recognize that rhythm — not to predict fate, but to understand the energy shaping the present moment.' Maintain appropriate spacing and typography hierarchy"
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Remove the expandable pada breakdown section from the CurrentNakshatraBanner component",
-      "acceptanceCriteria": [
-        "The CurrentNakshatraBanner no longer displays pada details",
-        "The expand/collapse functionality for pada information is removed",
-        "The banner still displays the current Nakshatra name and essential information"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/CurrentNakshatraBanner.tsx",
-          "operation": "modify",
-          "description": "Remove the expandable pada details section including the expand/collapse functionality, navamsa sign, title, degree range, and interpretive description. Keep the banner structure showing the current Nakshatra name and Moon icon with essential information"
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Remove the pada section tab from the Nakshatra detail page",
-      "acceptanceCriteria": [
-        "The Nakshatra detail page no longer displays a pada tab or section",
-        "Other tabs/sections (Overview, Characteristics, etc.) remain functional",
-        "The page layout adjusts appropriately without the pada section"
-      ],
-      "file_operations": [
+          "description": "Update error handling to distinguish between initialization delays and genuine errors. Display a loading state with initialization message while queries are retrying due to canister startup. Ensure CurrentNakshatraBanner gracefully handles initialization delays without showing error states prematurely."
+        },
         {
           "path": "frontend/src/pages/NakshatraDetailPage.tsx",
           "operation": "modify",
-          "description": "Remove the pada tab from the tabbed content sections. Ensure other tabs (Overview, Characteristics, etc.) remain functional and the layout adjusts appropriately without the pada section"
+          "description": "Add initialization-aware error handling to distinguish between canister startup delays and genuine query failures. Display loading spinner with initialization message during backend startup retries. Only show error UI after all retry attempts are exhausted and the error is not initialization-related."
+        },
+        {
+          "path": "frontend/src/pages/AdminPage.tsx",
+          "operation": "modify",
+          "description": "Update admin page error handling to gracefully manage canister initialization delays. Show loading state with initialization message while queries retry during backend startup. Ensure error messages only appear for genuine authorization or data fetching failures after retries complete."
+        },
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Add initialization status tracking for the backend actor. Implement health check or initialization detection logic to determine when the canister is fully ready. Expose initialization state through the hook return value so components can display appropriate loading states during startup."
         }
       ]
     }

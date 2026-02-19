@@ -5,10 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Save, Loader2, AlertCircle } from 'lucide-react';
-import { useNakshatraByName } from '../hooks/useQueries';
+import { useNakshatraByName, useGetNakshatraImage } from '../hooks/useQueries';
 import { useUpdateNakshatra } from '../hooks/useNakshatraMutations';
 import NakshatraImageUpload from '../components/NakshatraImageUpload';
+import AdminLogoutButton from '../components/AdminLogoutButton';
 import { toast } from 'sonner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import type { Nakshatra } from '../backend';
@@ -19,17 +22,23 @@ export default function AdminEditPage() {
   const nakshatraName = id as string;
   
   const { data: nakshatra, isLoading, error } = useNakshatraByName(nakshatraName);
+  const { data: currentImageUrl, isLoading: imageLoading } = useGetNakshatraImage(nakshatra?.imageId);
   const updateMutation = useUpdateNakshatra();
 
   const [formData, setFormData] = useState<Nakshatra>({
     name: '',
-    imageUrl: '',
+    imageId: undefined,
     description: '',
     rulingDeity: '',
     symbol: '',
     characteristics: '',
+    pada1: { title: '', description: '' },
+    pada2: { title: '', description: '' },
+    pada3: { title: '', description: '' },
+    pada4: { title: '', description: '' },
   });
 
+  const [imageData, setImageData] = useState<Uint8Array | null>(null);
   const [imageError, setImageError] = useState<string>('');
 
   useEffect(() => {
@@ -48,7 +57,10 @@ export default function AdminEditPage() {
     }
 
     try {
-      await updateMutation.mutateAsync(formData);
+      await updateMutation.mutateAsync({
+        nakshatra: formData,
+        imageData: imageData,
+      });
       toast.success('Nakshatra updated successfully!');
       navigate({ to: '/admin' });
     } catch (error) {
@@ -57,12 +69,27 @@ export default function AdminEditPage() {
     }
   };
 
+  const updatePadaField = (padaNum: 1 | 2 | 3 | 4, field: 'title' | 'description', value: string) => {
+    setFormData({
+      ...formData,
+      [`pada${padaNum}`]: {
+        ...formData[`pada${padaNum}`],
+        [field]: value,
+      },
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto text-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading Nakshatra data...</p>
+        <div className="max-w-3xl mx-auto">
+          <div className="flex justify-end mb-4">
+            <AdminLogoutButton />
+          </div>
+          <div className="text-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading Nakshatra data...</p>
+          </div>
         </div>
       </div>
     );
@@ -72,6 +99,9 @@ export default function AdminEditPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
+          <div className="flex justify-end mb-4">
+            <AdminLogoutButton />
+          </div>
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
@@ -92,14 +122,19 @@ export default function AdminEditPage() {
   if (!nakshatra) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto text-center py-16">
-          <p className="text-muted-foreground mb-4">Nakshatra "{nakshatraName}" not found</p>
-          <Link to="/admin">
-            <Button>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Admin
-            </Button>
-          </Link>
+        <div className="max-w-3xl mx-auto">
+          <div className="flex justify-end mb-4">
+            <AdminLogoutButton />
+          </div>
+          <div className="text-center py-16">
+            <p className="text-muted-foreground mb-4">Nakshatra "{nakshatraName}" not found</p>
+            <Link to="/admin">
+              <Button>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Admin
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -108,12 +143,15 @@ export default function AdminEditPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
-        <Link to="/admin">
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Admin
-          </Button>
-        </Link>
+        <div className="flex items-center justify-between mb-6">
+          <Link to="/admin">
+            <Button variant="ghost">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Admin
+            </Button>
+          </Link>
+          <AdminLogoutButton />
+        </div>
 
         <Card>
           <CardHeader>
@@ -121,10 +159,29 @@ export default function AdminEditPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <Label>Current Image</Label>
+                {imageLoading ? (
+                  <Skeleton className="aspect-[4/5] w-full max-w-sm rounded-lg" />
+                ) : currentImageUrl ? (
+                  <div className="aspect-[4/5] w-full max-w-sm rounded-lg overflow-hidden border border-border">
+                    <img
+                      src={currentImageUrl}
+                      alt={`Current ${formData.name} image`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No image uploaded yet</p>
+                )}
+              </div>
+
+              <Separator />
+
               <NakshatraImageUpload
-                currentImageUrl={formData.imageUrl}
-                onImageChange={(url) => {
-                  setFormData({ ...formData, imageUrl: url });
+                currentImageUrl={currentImageUrl || undefined}
+                onImageChange={(data) => {
+                  setImageData(data);
                   setImageError('');
                 }}
                 onError={setImageError}
@@ -177,10 +234,51 @@ export default function AdminEditPage() {
                   id="characteristics"
                   value={formData.characteristics}
                   onChange={(e) => setFormData({ ...formData, characteristics: e.target.value })}
-                  placeholder="e.g., Energetic, pioneering, and adventurous"
+                  placeholder="Enter key characteristics..."
                   rows={3}
                   required
                 />
+              </div>
+
+              <Separator className="my-8" />
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Pada Information</h3>
+                <p className="text-sm text-muted-foreground">
+                  Customize the pada descriptions for this Nakshatra. Leave blank to use default content.
+                </p>
+
+                {[1, 2, 3, 4].map((padaNum) => {
+                  const padaKey = `pada${padaNum}` as 'pada1' | 'pada2' | 'pada3' | 'pada4';
+                  return (
+                    <Card key={padaNum} className="bg-accent/5">
+                      <CardHeader>
+                        <CardTitle className="text-base">Pada {padaNum}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor={`pada${padaNum}-title`}>Title</Label>
+                          <Input
+                            id={`pada${padaNum}-title`}
+                            value={formData[padaKey].title}
+                            onChange={(e) => updatePadaField(padaNum as 1 | 2 | 3 | 4, 'title', e.target.value)}
+                            placeholder={`e.g., Initiatory Fire`}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor={`pada${padaNum}-description`}>Description</Label>
+                          <Textarea
+                            id={`pada${padaNum}-description`}
+                            value={formData[padaKey].description}
+                            onChange={(e) => updatePadaField(padaNum as 1 | 2 | 3 | 4, 'description', e.target.value)}
+                            placeholder={`Enter detailed description for Pada ${padaNum}...`}
+                            rows={6}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
 
               <div className="flex gap-3 pt-4">
