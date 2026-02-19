@@ -2,11 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-fix-the-adminpage-component-to-properly-fetch-and-display-all-27-nakshatras-from-the-backend-using-the-usenakshatrasquery-hook-ensuring-the-grid-renders-with-edit-buttons-for-each-nakshatra",
-      "featureTitle": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+      "featureId": "feature-create-a-comprehensive-pada-data-structure-containing-all-108-pada-descriptions-4-padas-for-each-of-the-27-nakshatras-with-the-following-fields-nakshatra-name-pada-number-1-4-degree-range-navamsa-sign-title-and-full-interpretive-description-text-as-provided-by-the-user",
+      "featureTitle": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with the following fields: nakshatra name, pada number (1-4), degree range, navamsa sign, title, and full interpretive description text as provided by the user",
       "files": [
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/AdminPage.tsx"
+        "frontend/src/utils/padaData.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -22,12 +21,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-verify-the-admineditpage-properly-loads-individual-nakshatra-data-and-all-form-fields-image-upload-ruling-deity-symbol-description-characteristics-are-functional-for-editing",
-      "featureTitle": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields (image upload, ruling deity, symbol, description, characteristics) are functional for editing",
+      "featureId": "feature-extend-the-nakshatraengine-utility-to-calculate-not-just-the-current-nakshatra-but-also-the-specific-pada-1-4-based-on-the-moon-s-precise-degree-position-within-the-nakshatra-s-13-20-range",
+      "featureTitle": "Extend the nakshatraEngine utility to calculate not just the current nakshatra but also the specific pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
       "files": [
-        "frontend/src/hooks/useNakshatraMutations.ts",
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/AdminEditPage.tsx"
+        "frontend/src/utils/nakshatraEngine.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -43,10 +40,30 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-debug-and-fix-any-react-query-hooks-usenakshatrasquery-usenakshatraquery-to-ensure-proper-actor-integration-and-data-fetching-from-the-backend",
-      "featureTitle": "Debug and fix any React Query hooks (useNakshatrasQuery, useNakshatraQuery) to ensure proper actor integration and data fetching from the backend",
+      "featureId": "feature-update-the-currentnakshatrabanner-component-to-display-the-current-pada-information-including-pada-number-navamsa-sign-title-and-full-interpretive-description-representing-the-current-lunar-climate",
+      "featureTitle": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
       "files": [
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/src/components/CurrentNakshatraBanner.tsx",
+        "frontend/src/hooks/useCurrentNakshatra.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-visual-indicator-or-emphasis-showing-that-the-displayed-pada-information-represents-the-current-lunar-climate-and-emotional-atmosphere",
+      "featureTitle": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
+      "files": [
+        "frontend/src/components/CurrentNakshatraBanner.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",

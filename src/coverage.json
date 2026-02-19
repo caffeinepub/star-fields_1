@@ -1,75 +1,73 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-18T19:01:10.535Z",
+  "generatedAt": "2026-02-18T20:58:24.509Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 4,
-    "implemented": 3,
+    "implemented": 4,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+        "summary": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with the following fields: nakshatra name, pada number (1-4), degree range, navamsa sign, title, and full interpretive description text as provided by the user",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/AdminPage.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/utils/padaData.ts"
         ],
         "matchedFiles": [
-          "frontend/src/pages/AdminPage.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/utils/padaData.ts"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields (image upload, ruling deity, symbol, description, characteristics) are functional for editing",
+        "summary": "Extend the nakshatraEngine utility to calculate not just the current nakshatra but also the specific pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/AdminEditPage.tsx",
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/hooks/useNakshatraMutations.ts",
-          "frontend/src/components/NakshatraImageUpload.tsx"
+          "frontend/src/utils/nakshatraEngine.ts"
         ],
         "matchedFiles": [
-          "frontend/src/pages/AdminEditPage.tsx",
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/hooks/useNakshatraMutations.ts"
+          "frontend/src/utils/nakshatraEngine.ts"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Ensure the backend getAllNakshatras and getNakshatra query methods are working correctly and returning the complete data structure including name, imageUrl, description, rulingDeity, symbol, and characteristics",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "summary": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/CurrentNakshatraBanner.tsx",
+          "frontend/src/hooks/useCurrentNakshatra.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/CurrentNakshatraBanner.tsx",
+          "frontend/src/hooks/useCurrentNakshatra.ts"
+        ]
       },
       {
         "id": "REQ-4",
-        "summary": "Debug and fix any React Query hooks (useNakshatrasQuery, useNakshatraQuery) to ensure proper actor integration and data fetching from the backend",
+        "summary": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useActor.ts",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/components/CurrentNakshatraBanner.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/components/CurrentNakshatraBanner.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/hooks/useNakshatraMutations.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AdminEditPage.tsx",
-    "frontend/src/pages/AdminPage.tsx",
+    "frontend/src/components/CurrentNakshatraBanner.tsx",
+    "frontend/src/hooks/useCurrentNakshatra.ts",
+    "frontend/src/utils/nakshatraEngine.ts",
+    "frontend/src/utils/padaData.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

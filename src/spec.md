@@ -1,12 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the admin dashboard to properly display and enable editing of all 27 Nakshatras.
+**Goal:** Display detailed pada information representing the current lunar climate in the main nakshatra banner.
 
 **Planned changes:**
-- Fix AdminPage component to fetch and display all 27 Nakshatras using useNakshatrasQuery hook
-- Ensure AdminEditPage loads individual Nakshatra data and all form fields work correctly
-- Verify backend getAllNakshatras and getNakshatra query methods return complete data
-- Debug React Query hooks to ensure proper actor integration and data fetching
+- Create comprehensive pada data structure with all 108 pada descriptions (4 padas per nakshatra) including degree range, navamsa sign, title, and interpretive text
+- Extend nakshatraEngine to calculate the current pada (1-4) based on Moon's precise degree position within the nakshatra
+- Update CurrentNakshatraBanner component to display current pada number, navamsa sign, title, and full description
+- Add visual indicator emphasizing that pada information represents the current lunar climate
 
-**User-visible outcome:** The admin dashboard displays all 27 Nakshatras in a grid with functional edit buttons, and the edit page allows updating all Nakshatra features including image upload, ruling deity, symbol, description, and characteristics.
+**User-visible outcome:** Users will see the current pada details in the main nakshatra banner, showing real-time lunar climate information that updates automatically as the Moon moves through different padas.

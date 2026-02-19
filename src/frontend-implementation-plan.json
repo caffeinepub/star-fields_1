@@ -1,82 +1,76 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix admin dashboard to display and edit all features",
+  "title": "Add detailed pada information to current nakshatra display",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+      "summary": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with nakshatra name, pada number, degree range, navamsa sign, title, and full interpretive description text",
       "acceptanceCriteria": [
-        "AdminPage successfully fetches all 27 Nakshatras from backend",
-        "All Nakshatras display in the grid layout with their images",
-        "Each Nakshatra card shows an edit button that links to the AdminEditPage",
-        "Loading and error states display appropriately"
+        "Data structure includes all 27 nakshatras with 4 padas each (108 total)",
+        "Each pada entry contains nakshatra name, pada number, degree range, navamsa sign, title, and complete description text",
+        "All provided pada descriptions from Ashwini through Shravana are accurately captured"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/AdminPage.tsx",
-          "operation": "modify",
-          "description": "Debug and fix the AdminPage component to properly integrate with useNakshatrasQuery hook. Ensure the query is called with the correct actor dependency, properly handles loading/error states, and renders all 27 Nakshatras in a grid layout with functional edit buttons linking to AdminEditPage."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Verify and fix the useNakshatrasQuery hook implementation to ensure it correctly calls the getAllNakshatras backend method through the actor. Ensure proper error handling, loading states, and that the query key includes the actor dependency for proper cache invalidation."
+          "path": "frontend/src/utils/padaData.ts",
+          "operation": "create",
+          "description": "Create a new TypeScript file containing the complete pada data structure with all 108 pada entries. Define a TypeScript interface for PadaInfo with fields: nakshatraName (string), padaNumber (1-4), degreeRange (string), navamsaSign (string), title (string), description (string). Export a constant array or map structure containing all pada descriptions provided by the user, ensuring each of the 27 nakshatras has exactly 4 pada entries with their complete interpretive text."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields are functional for editing",
+      "summary": "Extend the nakshatraEngine utility to calculate the current pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
       "acceptanceCriteria": [
-        "AdminEditPage successfully fetches single Nakshatra data by name",
-        "All form fields populate with existing Nakshatra data",
-        "Image upload component works with 4:5 aspect ratio validation",
-        "Save functionality successfully updates backend data",
-        "Success/error toast notifications display after save attempts"
+        "Function calculates current pada by dividing nakshatra degree range into 4 equal parts (3°20' each)",
+        "Returns pada number (1-4) along with current nakshatra",
+        "Calculation updates in real-time with Moon position changes"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/AdminEditPage.tsx",
+          "path": "frontend/src/utils/nakshatraEngine.ts",
           "operation": "modify",
-          "description": "Debug and fix the AdminEditPage to properly fetch individual Nakshatra data using useNakshatraQuery with the name parameter from the route. Ensure all form fields (image upload, ruling deity, symbol, description, characteristics) populate correctly with existing data and that the save functionality properly calls the update mutation with success/error toast notifications."
+          "description": "Add a new function calculateCurrentPada that takes the Moon's ecliptic longitude and returns both the nakshatra number and pada number (1-4). Calculate the pada by determining the Moon's position within the current nakshatra's 13°20' span, dividing this into 4 equal parts of 3°20' each. Return an object containing both nakshatraNumber and padaNumber. Update the getCurrentNakshatra function to also return the pada number by calling this new calculation function."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
+      "acceptanceCriteria": [
+        "Component displays current pada number (1-4) alongside nakshatra name",
+        "Shows navamsa sign and pada title",
+        "Displays full pada description text in a readable format",
+        "Updates automatically when Moon transitions to a new pada",
+        "Visual presentation is consistent with existing banner design"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CurrentNakshatraBanner.tsx",
+          "operation": "modify",
+          "description": "Import the pada data structure from frontend/src/utils/padaData.ts. Update the component to retrieve the current pada number from the useCurrentNakshatra hook (which now returns pada information). Look up the corresponding pada details from the pada data structure using the current nakshatra name and pada number. Display the pada number, navamsa sign, and pada title prominently within the banner. Add a section to display the full pada description text in a readable format, potentially using a collapsible or expandable UI pattern if the text is lengthy. Ensure the component updates automatically when the Moon transitions to a new pada by leveraging the existing 5-minute refresh interval from the useCurrentNakshatra hook. Maintain the existing cosmic/violet design aesthetic and banner structure."
         },
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/hooks/useCurrentNakshatra.ts",
           "operation": "modify",
-          "description": "Verify and fix the useNakshatraQuery hook to correctly fetch individual Nakshatra data by name using the readNakshatra backend method. Ensure proper actor dependency management and error handling for missing or invalid Nakshatra names."
-        },
-        {
-          "path": "frontend/src/hooks/useNakshatraMutations.ts",
-          "operation": "modify",
-          "description": "Verify the useUpdateNakshatraMutation hook correctly calls the updateNakshatra backend method with the complete Nakshatra data structure and properly invalidates the query cache on success to refresh the admin dashboard."
-        },
-        {
-          "path": "frontend/src/components/NakshatraImageUpload.tsx",
-          "operation": "modify",
-          "description": "Verify the NakshatraImageUpload component properly validates the 4:5 aspect ratio requirement, shows upload progress, previews the image, and converts the uploaded file to a data URL format compatible with the backend imageUrl field."
+          "description": "Update the hook to return not just the current nakshatra but also the current pada number. Modify the return type to include the pada number (1-4) by calling the updated getCurrentNakshatra function from nakshatraEngine that now returns pada information. Ensure the hook continues to refresh every 5 minutes as specified in the constraints."
         }
       ]
     },
     {
       "id": "REQ-4",
-      "summary": "Debug and fix any React Query hooks to ensure proper actor integration and data fetching from the backend",
+      "summary": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
       "acceptanceCriteria": [
-        "useNakshatrasQuery successfully calls backend and returns data",
-        "useNakshatraQuery works with Nakshatra name parameter",
-        "Query hooks properly handle loading and error states",
-        "Actor dependency is correctly managed in query keys"
+        "Clear visual treatment distinguishes current pada as representing present lunar climate",
+        "Language or labeling emphasizes real-time lunar influence",
+        "Design maintains cosmic/astronomical aesthetic of existing interface"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useActor.ts",
+          "path": "frontend/src/components/CurrentNakshatraBanner.tsx",
           "operation": "modify",
-          "description": "Verify the useActor hook properly manages the ICP actor lifecycle based on Internet Identity authentication state and correctly triggers query invalidation when the actor changes to ensure all dependent queries refetch with the new actor instance."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Ensure both useNakshatrasQuery and useNakshatraQuery hooks correctly depend on the actor from useActor, include the actor in their query keys for proper cache management, handle null actor states appropriately (disabling queries when actor is unavailable), and properly map backend response types to the frontend Nakshatra interface."
+          "description": "Add visual emphasis to indicate the pada information represents the current lunar climate. Include a label or heading such as 'Current Lunar Climate' or 'Present Lunar Atmosphere' above or near the pada details. Consider adding a subtle animation, glow effect, or icon (such as a moon phase indicator) to draw attention to the real-time nature of the information. Use the existing OKLCH color system from the theme (purple/violet palette) to maintain the cosmic aesthetic. Ensure the visual treatment is distinct but harmonious with the existing banner design."
         }
       ]
     }

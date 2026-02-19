@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { getCurrentNakshatra, type NakshatraInfo } from '../utils/nakshatraEngine';
+import { getCurrentNakshatra, type NakshatraWithPada } from '../utils/nakshatraEngine';
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // Refresh every 5 minutes
 
 export function useCurrentNakshatra() {
-  const [currentNakshatra, setCurrentNakshatra] = useState<NakshatraInfo>(() => 
+  const [currentNakshatra, setCurrentNakshatra] = useState<NakshatraWithPada>(() => 
     getCurrentNakshatra()
   );
 

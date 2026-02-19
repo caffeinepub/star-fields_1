@@ -1,37 +1,42 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Admin dashboard project for managing and editing Nakshatras and other features",
+  "summary": "Lunar calendar app with detailed nakshatra/pada tracking, including interpretive descriptions of lunar climate for each pada position",
   "architectural_notes": [
-    "Admin dashboard exists for feature management",
-    "Nakshatras are key data entities that need to be displayed and edited",
-    "Dashboard should support editing all features"
+    "Pada data structure includes: nakshatra name, degree range, pada number, navamsa sign, title, and full interpretive description text",
+    "Current pada display should show real-time lunar climate interpretation based on Moon's position",
+    "Total of 108 pada descriptions spanning 27 nakshatras need to be stored/accessible"
   ],
-  "known_issues": [
-    "Admin dashboard not displaying any Nakshatras for editing",
-    "Dashboard functionality not working as expected"
-  ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-fix-the-adminpage-component-to-properly-fetch-and-display-all-27-nakshatras-from-the-backend-using-the-usenakshatrasquery-hook-ensuring-the-grid-renders-with-edit-buttons-for-each-nakshatra",
-      "title": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+      "id": "feature-create-a-comprehensive-pada-data-structure-containing-all-108-pada-descriptions-4-padas-for-each-of-the-27-nakshatras-with-the-following-fields-nakshatra-name-pada-number-1-4-degree-range-navamsa-sign-title-and-full-interpretive-description-text-as-provided-by-the-user",
+      "title": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with the following fields: nakshatra name, pada number (1-4), degree range, navamsa sign, title, and full interpretive description text as provided by the user",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-verify-the-admineditpage-properly-loads-individual-nakshatra-data-and-all-form-fields-image-upload-ruling-deity-symbol-description-characteristics-are-functional-for-editing",
-      "title": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields (image upload, ruling deity, symbol, description, characteristics) are functional for editing",
+      "id": "feature-extend-the-nakshatraengine-utility-to-calculate-not-just-the-current-nakshatra-but-also-the-specific-pada-1-4-based-on-the-moon-s-precise-degree-position-within-the-nakshatra-s-13-20-range",
+      "title": "Extend the nakshatraEngine utility to calculate not just the current nakshatra but also the specific pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-debug-and-fix-any-react-query-hooks-usenakshatrasquery-usenakshatraquery-to-ensure-proper-actor-integration-and-data-fetching-from-the-backend",
-      "title": "Debug and fix any React Query hooks (useNakshatrasQuery, useNakshatraQuery) to ensure proper actor integration and data fetching from the backend",
+      "id": "feature-update-the-currentnakshatrabanner-component-to-display-the-current-pada-information-including-pada-number-navamsa-sign-title-and-full-interpretive-description-representing-the-current-lunar-climate",
+      "title": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-visual-indicator-or-emphasis-showing-that-the-displayed-pada-information-represents-the-current-lunar-climate-and-emotional-atmosphere",
+      "title": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
       "reqIds": [
         "REQ-4"
       ],
@@ -40,15 +45,13 @@
   ],
   "new_feature_requests": [
     {
-      "id": "AR-3",
-      "summary": "Ensure the backend getAllNakshatras and getNakshatra query methods are working correctly and returning the complete data structure including name, imageUrl, description, rulingDeity, symbol, and characteristics",
-      "reqIds": [
-        "REQ-3"
-      ],
+      "id": "AR-1",
+      "summary": "Add detailed pada descriptions to main page current pada section, representing current lunar climate with interpretive text for all 27 nakshatras (108 padas total)",
+      "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Star Fields Admin",
+  "projectName": "Star Fields",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

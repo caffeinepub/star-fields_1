@@ -1,98 +1,98 @@
 {
   "kind": "build_request",
-  "title": "Fix admin dashboard to display and edit all features",
-  "projectName": "Star Fields Admin",
-  "priority": "high",
+  "title": "Add detailed pada information to current nakshatra display",
+  "projectName": "Star Fields",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Fix the AdminPage component to properly fetch and display all 27 Nakshatras from the backend using the useNakshatrasQuery hook, ensuring the grid renders with edit buttons for each Nakshatra",
+      "text": "Create a comprehensive pada data structure containing all 108 pada descriptions (4 padas for each of the 27 nakshatras) with the following fields: nakshatra name, pada number (1-4), degree range, navamsa sign, title, and full interpretive description text as provided by the user",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
+          "msg-1"
         ],
         "quotes": [
-          "the dashboard is not working. please fix it so i can edit all the features"
+          "add pada details in the main page (current pada)",
+          "here is the info for each pada"
         ]
       },
       "acceptanceCriteria": [
-        "AdminPage successfully fetches all 27 Nakshatras from backend",
-        "All Nakshatras display in the grid layout with their images",
-        "Each Nakshatra card shows an edit button that links to the AdminEditPage",
-        "Loading and error states display appropriately"
+        "Data structure includes all 27 nakshatras with 4 padas each (108 total)",
+        "Each pada entry contains nakshatra name, pada number, degree range, navamsa sign, title, and complete description text",
+        "All provided pada descriptions from Ashwini through Shravana are accurately captured"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Verify the AdminEditPage properly loads individual Nakshatra data and all form fields (image upload, ruling deity, symbol, description, characteristics) are functional for editing",
+      "text": "Extend the nakshatraEngine utility to calculate not just the current nakshatra but also the specific pada (1-4) based on the Moon's precise degree position within the nakshatra's 13°20' range",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
+          "msg-1"
         ],
         "quotes": [
-          "please fix it so i can edit all the features"
+          "current pada info represent the current lunar climate"
         ]
       },
       "acceptanceCriteria": [
-        "AdminEditPage successfully fetches single Nakshatra data by name",
-        "All form fields populate with existing Nakshatra data",
-        "Image upload component works with 4:5 aspect ratio validation",
-        "Save functionality successfully updates backend data",
-        "Success/error toast notifications display after save attempts"
+        "Function calculates current pada by dividing nakshatra degree range into 4 equal parts (3°20' each)",
+        "Returns pada number (1-4) along with current nakshatra",
+        "Calculation updates in real-time with Moon position changes"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Ensure the backend getAllNakshatras and getNakshatra query methods are working correctly and returning the complete data structure including name, imageUrl, description, rulingDeity, symbol, and characteristics",
-      "target": "backend",
+      "text": "Update the CurrentNakshatraBanner component to display the current pada information including pada number, navamsa sign, title, and full interpretive description representing the current lunar climate",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
+          "msg-1"
         ],
         "quotes": [
-          "the admin dashboard is not displaying any nakshatras to edit"
+          "add pada details in the main page (current pada)",
+          "make the current pada info represent the current lunar climate"
         ]
       },
       "acceptanceCriteria": [
-        "getAllNakshatras returns all 27 Nakshatras with complete data",
-        "getNakshatra correctly retrieves individual Nakshatra by name",
-        "All Nakshatra properties are properly serialized in responses",
-        "Backend queries handle missing data gracefully"
+        "Component displays current pada number (1-4) alongside nakshatra name",
+        "Shows navamsa sign and pada title",
+        "Displays full pada description text in a readable format",
+        "Updates automatically when Moon transitions to a new pada",
+        "Visual presentation is consistent with existing banner design"
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Debug and fix any React Query hooks (useNakshatrasQuery, useNakshatraQuery) to ensure proper actor integration and data fetching from the backend",
+      "text": "Add a visual indicator or emphasis showing that the displayed pada information represents the current lunar climate and emotional atmosphere",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
+          "msg-1"
         ],
         "quotes": [
-          "the dashboard is not working"
+          "make the current pada info represent the current lunar climate"
         ]
       },
       "acceptanceCriteria": [
-        "useNakshatrasQuery successfully calls backend and returns data",
-        "useNakshatraQuery works with Nakshatra name parameter",
-        "Query hooks properly handle loading and error states",
-        "Actor dependency is correctly managed in query keys"
+        "Clear visual treatment distinguishes current pada as representing present lunar climate",
+        "Language or labeling emphasizes real-time lunar influence",
+        "Design maintains cosmic/astronomical aesthetic of existing interface"
       ]
     }
   ],
   "constraints": [
-    "Preserve existing Motoko backend data structure with all 27 hardcoded Nakshatras",
-    "Maintain 4:5 aspect ratio requirement for Nakshatra images",
-    "Keep existing Layout, Header, and Footer components unchanged",
-    "Do not modify Internet Identity authentication implementation"
+    "Do not modify the backend - all pada calculations and data should live in the frontend",
+    "Preserve the existing CurrentNakshatraBanner component structure and styling approach",
+    "Maintain the 5-minute refresh interval for nakshatra calculations",
+    "Do not alter the existing nakshatra grid or detail pages"
   ],
   "nonGoals": [
-    "Adding new features beyond fixing the existing admin dashboard",
-    "Redesigning the admin interface layout or styling",
-    "Changing the Nakshatra data model or adding new fields",
-    "Implementing user role management or access control"
+    "Adding pada information to individual nakshatra detail pages",
+    "Creating admin functionality to edit pada descriptions",
+    "Storing pada data in the backend canister",
+    "Adding pada filtering or search functionality",
+    "Creating separate pages for pada information"
   ],
   "imageRequirements": {
     "required": [],

@@ -6,6 +6,10 @@ export interface NakshatraInfo {
   endDegree: number;
 }
 
+export interface NakshatraWithPada extends NakshatraInfo {
+  padaNumber: 1 | 2 | 3 | 4;
+}
+
 export const NAKSHATRAS: NakshatraInfo[] = [
   { name: 'Ashwini', index: 1, slug: 'ashwini', startDegree: 0, endDegree: 13.333333 },
   { name: 'Bharani', index: 2, slug: 'bharani', startDegree: 13.333333, endDegree: 26.666667 },
@@ -130,16 +134,35 @@ export function getMoonSiderealLongitude(date: Date = new Date()): number {
 }
 
 /**
- * Get the current Nakshatra based on Moon's sidereal longitude
+ * Calculate the current pada (1-4) based on Moon's position within the nakshatra
+ * Each nakshatra spans 13°20' (13.333333°), divided into 4 padas of 3°20' (3.333333°) each
  */
-export function getCurrentNakshatra(date: Date = new Date()): NakshatraInfo {
+function calculatePada(longitude: number, nakshatraStartDegree: number): 1 | 2 | 3 | 4 {
+  const positionInNakshatra = longitude - nakshatraStartDegree;
+  const padaWidth = 13.333333 / 4; // 3.333333 degrees per pada
+  
+  if (positionInNakshatra < padaWidth) return 1;
+  if (positionInNakshatra < padaWidth * 2) return 2;
+  if (positionInNakshatra < padaWidth * 3) return 3;
+  return 4;
+}
+
+/**
+ * Get the current Nakshatra and Pada based on Moon's sidereal longitude
+ */
+export function getCurrentNakshatra(date: Date = new Date()): NakshatraWithPada {
   const longitude = getMoonSiderealLongitude(date);
   
   const nakshatra = NAKSHATRAS.find(
     (n) => longitude >= n.startDegree && longitude < n.endDegree
-  );
+  ) || NAKSHATRAS[0];
   
-  return nakshatra || NAKSHATRAS[0];
+  const padaNumber = calculatePada(longitude, nakshatra.startDegree);
+  
+  return {
+    ...nakshatra,
+    padaNumber
+  };
 }
 
 /**
