@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T20:11:57.391Z",
+  "generatedAt": "2026-02-19T20:22:16.238Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -12,56 +12,45 @@
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Investigate and fix the backend canister initialization issue causing 'Unable to Load Nakshatras' error. Ensure the main.mo actor initializes properly and responds to frontend queries without timing out or showing 'service temporarily unavailable' errors.",
+        "summary": "Modify the backend authorization logic to allow authenticated admin users to save edits and replace Nakshatra images without the 'only administrators can replace Nakshatra images' error",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
+        "summary": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/NakshatraGrid.tsx",
-          "frontend/src/pages/HomePage.tsx",
-          "frontend/src/pages/NakshatraDetailPage.tsx",
-          "frontend/src/pages/AdminPage.tsx",
+          "frontend/src/hooks/usePasscodeAuth.ts",
           "frontend/src/hooks/useActor.ts"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/NakshatraGrid.tsx",
-          "frontend/src/pages/HomePage.tsx",
-          "frontend/src/pages/NakshatraDetailPage.tsx",
-          "frontend/src/pages/AdminPage.tsx"
+          "frontend/src/hooks/usePasscodeAuth.ts"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Verify that the default Nakshatras (Ashwini and Bharani) are properly initialized in main.mo during canister deployment and can be retrieved immediately after startup.",
-        "status": "unknown",
-        "plannedFiles": [],
+        "summary": "Verify that the AdminEditPage form successfully submits both Nakshatra data edits and image updates without permission errors",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/AdminEditPage.tsx",
+          "frontend/src/hooks/useNakshatraMutations.ts",
+          "frontend/src/components/NakshatraImageUpload.tsx"
+        ],
         "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/NakshatraGrid.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AdminPage.tsx",
-    "frontend/src/pages/HomePage.tsx",
-    "frontend/src/pages/NakshatraDetailPage.tsx",
+    "frontend/src/components/AdminLogoutButton.tsx",
+    "frontend/src/components/PasscodeEntry.tsx",
+    "frontend/src/hooks/usePasscodeAuth.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

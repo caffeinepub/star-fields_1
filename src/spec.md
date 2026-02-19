@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the backend canister initialization issue causing "Unable to Load Nakshatras" errors and improve frontend error handling during startup.
+**Goal:** Fix admin dashboard permissions to allow authenticated admins to save Nakshatra edits and replace images without authorization errors.
 
 **Planned changes:**
-- Investigate and resolve backend canister initialization problems in main.mo to ensure proper startup and query responses
-- Add retry logic and improved loading states in useQueries.ts to handle canister initialization delays gracefully
-- Verify default Nakshatras (Ashwini and Bharani) initialize correctly and are immediately retrievable after deployment
+- Update backend authorization logic to recognize authenticated admin users for write operations
+- Ensure passcode authentication properly grants permissions for Nakshatra data updates and image replacements
+- Fix the AdminEditPage form submission to complete successfully without permission errors
 
-**User-visible outcome:** Users will see a loading state during canister initialization instead of error messages, and the Nakshatra grid will load successfully without "service temporarily unavailable" errors.
+**User-visible outcome:** Authenticated admin users can save Nakshatra edits and upload/replace images in the admin dashboard without encountering "only administrators can replace Nakshatra images" errors.

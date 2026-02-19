@@ -1,46 +1,53 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Nakshatra Loading Error - Frontend Error Handling & Retry Logic",
+  "title": "Fix admin dashboard permissions for saving edits and images",
   "requirements": [
     {
       "id": "REQ-2",
-      "summary": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays with user-friendly loading states",
+      "summary": "Ensure admin authentication state properly authorizes backend write operations for Nakshatra updates and image replacements",
       "acceptanceCriteria": [
-        "Frontend shows a loading spinner or initialization message during canister startup",
-        "Queries automatically retry after initialization delays without user intervention",
-        "Error messages only appear for genuine failures, not initialization delays"
+        "Passcode authentication grants full write permissions for Nakshatra operations",
+        "Image upload and replacement operations succeed when admin is authenticated",
+        "Authorization errors are prevented for all admin write operations"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/hooks/usePasscodeAuth.ts",
           "operation": "modify",
-          "description": "Enhance error transformation to distinguish between initialization delays and genuine failures. Add retry logic with exponential backoff for 'service temporarily unavailable' errors. Configure retries (e.g., retry: 5, retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)) to handle canister initialization gracefully. Transform 'stopped or initializing' errors into non-error loading states instead of displaying error messages."
-        },
-        {
-          "path": "frontend/src/components/NakshatraGrid.tsx",
-          "operation": "modify",
-          "description": "Update loading and error state handling to display a friendly initialization message when the backend is starting up. Show a loading spinner with text like 'Initializing backend canister...' during initialization delays instead of error messages. Only display error UI for genuine query failures after all retries are exhausted."
-        },
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
-          "operation": "modify",
-          "description": "Update error handling to distinguish between initialization delays and genuine errors. Display a loading state with initialization message while queries are retrying due to canister startup. Ensure CurrentNakshatraBanner gracefully handles initialization delays without showing error states prematurely."
-        },
-        {
-          "path": "frontend/src/pages/NakshatraDetailPage.tsx",
-          "operation": "modify",
-          "description": "Add initialization-aware error handling to distinguish between canister startup delays and genuine query failures. Display loading spinner with initialization message during backend startup retries. Only show error UI after all retry attempts are exhausted and the error is not initialization-related."
-        },
-        {
-          "path": "frontend/src/pages/AdminPage.tsx",
-          "operation": "modify",
-          "description": "Update admin page error handling to gracefully manage canister initialization delays. Show loading state with initialization message while queries retry during backend startup. Ensure error messages only appear for genuine authorization or data fetching failures after retries complete."
+          "description": "Review and ensure the passcode authentication hook properly stores and synchronizes admin authentication state across components. Verify that isAuthenticated correctly reflects the admin status needed for backend authorization."
         },
         {
           "path": "frontend/src/hooks/useActor.ts",
           "operation": "modify",
-          "description": "Add initialization status tracking for the backend actor. Implement health check or initialization detection logic to determine when the canister is fully ready. Expose initialization state through the hook return value so components can display appropriate loading states during startup."
+          "description": "Ensure the backend actor is properly configured to include admin authentication credentials when making write operations. Verify that the actor instance passes the necessary authorization context for replaceNakshatraImage and updateNakshatra calls."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Verify AdminEditPage form successfully submits Nakshatra data edits and image updates without permission errors",
+      "acceptanceCriteria": [
+        "Save button on AdminEditPage successfully commits all changes",
+        "Image uploads complete without authorization errors",
+        "Success toast confirmation appears after successful saves",
+        "Updated data and images are immediately reflected in the admin dashboard"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminEditPage.tsx",
+          "operation": "modify",
+          "description": "Review the form submission logic to ensure it properly calls both updateNakshatra and replaceNakshatraImage with the authenticated context. Verify error handling displays the specific 'only administrators can replace Nakshatra images' error to users. Ensure the mutation hook from useNakshatraMutations is correctly invoked with all required parameters."
+        },
+        {
+          "path": "frontend/src/hooks/useNakshatraMutations.ts",
+          "operation": "modify",
+          "description": "Review the mutation hook to ensure it properly handles both Nakshatra data updates and image replacements in sequence. Verify that authentication state is checked before calling backend methods. Add error handling that distinguishes between authorization errors and other failures. Ensure the mutation invalidates the query cache on success to immediately reflect changes."
+        },
+        {
+          "path": "frontend/src/components/NakshatraImageUpload.tsx",
+          "operation": "modify",
+          "description": "Verify the image upload component properly converts files to Uint8Array format required by the backend. Ensure the component passes the image data correctly to the parent form without loss of authentication context."
         }
       ]
     }

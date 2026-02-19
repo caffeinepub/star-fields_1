@@ -2,14 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-proper-error-handling-and-retry-logic-in-usequeries-ts-to-gracefully-handle-canister-initialization-delays-display-user-friendly-loading-states-while-the-backend-initializes-instead-of-showing-error-messages",
-      "featureTitle": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
+      "featureId": "feature-ensure-the-admin-authentication-state-from-usepasscodeauth-properly-authorizes-backend-write-operations-for-both-nakshatra-data-updates-and-image-replacements",
+      "featureTitle": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
       "files": [
-        "frontend/src/components/NakshatraGrid.tsx",
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/AdminPage.tsx",
-        "frontend/src/pages/HomePage.tsx",
-        "frontend/src/pages/NakshatraDetailPage.tsx"
+        "frontend/src/hooks/usePasscodeAuth.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",

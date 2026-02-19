@@ -4,13 +4,13 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [
-    "Unable to load Nakshatras - backend canister may be stopped or initializing"
+    "Admin dashboard shows 'only administrators can replace Nakshatra images' error when attempting to save edits and update images"
   ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-add-proper-error-handling-and-retry-logic-in-usequeries-ts-to-gracefully-handle-canister-initialization-delays-display-user-friendly-loading-states-while-the-backend-initializes-instead-of-showing-error-messages",
-      "title": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
+      "id": "feature-ensure-the-admin-authentication-state-from-usepasscodeauth-properly-authorizes-backend-write-operations-for-both-nakshatra-data-updates-and-image-replacements",
+      "title": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
       "reqIds": [
         "REQ-2"
       ],
@@ -20,22 +20,28 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Investigate and fix the backend canister initialization issue causing 'Unable to Load Nakshatras' error. Ensure the main.mo actor initializes properly and responds to frontend queries without timing out or showing 'service temporarily unavailable' errors.",
+      "summary": "Fix admin dashboard permissions to allow saving edits and updating Nakshatra images",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Modify the backend authorization logic to allow authenticated admin users to save edits and replace Nakshatra images without the 'only administrators can replace Nakshatra images' error",
       "reqIds": [
         "REQ-1"
       ],
       "status": "pending"
     },
     {
-      "id": "AR-3",
-      "summary": "Verify that the default Nakshatras (Ashwini and Bharani) are properly initialized in main.mo during canister deployment and can be retrieved immediately after startup.",
+      "id": "AR-4",
+      "summary": "Verify that the AdminEditPage form successfully submits both Nakshatra data edits and image updates without permission errors",
       "reqIds": [
         "REQ-3"
       ],
       "status": "pending"
     }
   ],
-  "projectName": "Star Field Explorer",
+  "projectName": "Fix admin dashboard permissions for saving edits and images",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

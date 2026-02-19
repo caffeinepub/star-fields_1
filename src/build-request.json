@@ -1,71 +1,73 @@
 {
   "kind": "build_request",
-  "title": "Fix Nakshatra Loading Error - Backend Canister Initialization",
-  "projectName": "Star Field Explorer",
+  "title": "Fix admin dashboard permissions for saving edits and images",
   "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Investigate and fix the backend canister initialization issue causing 'Unable to Load Nakshatras' error. Ensure the main.mo actor initializes properly and responds to frontend queries without timing out or showing 'service temporarily unavailable' errors.",
+      "text": "Modify the backend authorization logic to allow authenticated admin users to save edits and replace Nakshatra images without the 'only administrators can replace Nakshatra images' error",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "Unable to Load Nakshatras",
-          "The service is temporarily unavailable. The backend canister may be stopped or initializing."
+          "error: only adminstrators can replace Nakshatra images"
         ]
       },
       "acceptanceCriteria": [
-        "Backend canister starts successfully without initialization errors",
-        "Frontend can fetch Nakshatra data immediately after deployment",
-        "No 'service temporarily unavailable' errors appear when loading the homepage or Nakshatra grid"
+        "Admin users authenticated via passcode can successfully save Nakshatra edits",
+        "Admin users can replace Nakshatra images without authorization errors",
+        "The 'only administrators can replace Nakshatra images' error no longer occurs for authenticated admins"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add proper error handling and retry logic in useQueries.ts to gracefully handle canister initialization delays. Display user-friendly loading states while the backend initializes instead of showing error messages.",
-      "target": "frontend",
+      "text": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "The service is temporarily unavailable. The backend canister may be stopped or initializing. Please try again in a moment."
+          "please allow me to make exits and save new images in the admin dashboard"
         ]
       },
       "acceptanceCriteria": [
-        "Frontend shows a loading spinner or initialization message during canister startup",
-        "Queries automatically retry after initialization delays without user intervention",
-        "Error messages only appear for genuine failures, not initialization delays"
+        "Passcode authentication grants full write permissions for Nakshatra operations",
+        "Image upload and replacement operations succeed when admin is authenticated",
+        "Authorization errors are prevented for all admin write operations"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Verify that the default Nakshatras (Ashwini and Bharani) are properly initialized in main.mo during canister deployment and can be retrieved immediately after startup.",
-      "target": "backend",
+      "text": "Verify that the AdminEditPage form successfully submits both Nakshatra data edits and image updates without permission errors",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
+        ],
+        "quotes": [
+          "It is currently not allowing me to save the edits and updated images"
         ]
       },
       "acceptanceCriteria": [
-        "Default Nakshatras are consistently present after fresh deployment",
-        "getNakshatras() query returns at least 2 default entries immediately",
-        "No stable memory corruption or state initialization issues"
+        "Save button on AdminEditPage successfully commits all changes",
+        "Image uploads complete without authorization errors",
+        "Success toast confirmation appears after successful saves",
+        "Updated data and images are immediately reflected in the admin dashboard"
       ]
     }
   ],
   "constraints": [
-    "Do not change the single-actor architecture in main.mo",
-    "Preserve existing Nakshatra data structure and API interfaces",
-    "Maintain compatibility with current frontend query hooks"
+    "Maintain the existing passcode-based authentication system",
+    "Do not break the current admin authentication flow",
+    "Preserve all existing Nakshatra data and images"
   ],
   "nonGoals": [
-    "Migrating to multi-canister architecture",
-    "Adding new Nakshatra features or data fields",
-    "Redesigning the error UI components"
+    "Changing the authentication mechanism from passcode to Internet Identity",
+    "Adding role-based access control beyond admin/non-admin",
+    "Modifying the frontend UI layout or styling"
   ],
   "imageRequirements": {
     "required": [],

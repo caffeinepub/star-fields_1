@@ -19,9 +19,9 @@
   "frontend/src/components/NakshatraImageUpload.tsx": "Image upload component that converts uploaded files to Uint8Array with 4:5 aspect ratio validation, upload progress tracking, and preview display for canister blob storage.",
   "frontend/src/utils/padaData.ts": "Complete pada data structure containing all 108 pada entries (4 padas for each of 27 nakshatras) with degree ranges, navamsa signs, titles, and full interpretive descriptions representing the current lunar climate.",
   "frontend/index.html": "HTML entry point with updated title \"Star Field Explorer\" for browser tab display.",
-  "frontend/src/hooks/usePasscodeAuth.ts": "Custom hook that manages passcode authentication state using sessionStorage and cross-component synchronization via custom window events to ensure all components using the hook share the same authentication state.",
-  "frontend/src/components/PasscodeEntry.tsx": "Passcode entry form component with password input, validation, error display, and loading states that uses the usePasscodeAuth hook to authenticate admin access, with improved state handling to prevent unnecessary updates after successful authentication.",
+  "frontend/src/hooks/usePasscodeAuth.ts": "Custom hook that manages passcode authentication and integrates with Internet Identity, ensuring that when a valid passcode is entered, the admin also authenticates with Internet Identity so the backend recognizes them as an admin with proper permissions.",
+  "frontend/src/components/PasscodeEntry.tsx": "Passcode entry form component that validates the admin passcode and triggers Internet Identity authentication flow, with loading states to indicate when II authentication is in progress.",
   "frontend/src/components/AdminGuard.tsx": "Guard component that wraps admin routes and displays PasscodeEntry if not authenticated, otherwise renders children components.",
-  "frontend/src/components/AdminLogoutButton.tsx": "Lock button component that clears passcode authentication state and shows a toast notification when clicked.",
+  "frontend/src/components/AdminLogoutButton.tsx": "Lock button component that clears both passcode authentication state and Internet Identity session, then clears all cached queries and shows a toast notification.",
   "frontend/src/hooks/useActor.ts": "Actor initialization hook with initialization state tracking, retry logic for actor creation failures, and exposed isInitializing flag to help components display appropriate loading states during backend startup."
 }

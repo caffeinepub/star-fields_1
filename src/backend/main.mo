@@ -7,9 +7,9 @@ import Blob "mo:core/Blob";
 import MixinStorage "blob-storage/Mixin";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
-import Migration "migration";
 
-(with migration = Migration.run)
+// No migration necessary as this file got updated correctly and all changes here are persistent
+
 actor {
   include MixinStorage();
 

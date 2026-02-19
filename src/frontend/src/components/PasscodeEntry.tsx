@@ -1,48 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Lock, Loader2 } from 'lucide-react';
 import { usePasscodeAuth } from '../hooks/usePasscodeAuth';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function PasscodeEntry() {
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { validatePasscode } = usePasscodeAuth();
+  const { validatePasscode, isAuthenticating } = usePasscodeAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setIsSubmitting(true);
 
-    // Add a small delay for better UX
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    const isValid = validatePasscode(passcode);
-    
+    const isValid = await validatePasscode(passcode);
     if (!isValid) {
-      setError('Incorrect passcode. Please try again.');
+      setError('Invalid passcode');
       setPasscode('');
-      setIsSubmitting(false);
     }
-    // Note: Don't set isSubmitting to false on success - component will unmount
+    // If valid, the authentication flow will continue with Internet Identity
   };
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-accent/20">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 rounded-full bg-primary/10">
-              <Lock className="w-8 h-8 text-primary" />
-            </div>
+        <CardHeader className="text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+            <Lock className="w-6 h-6 text-primary" />
           </div>
           <CardTitle className="text-2xl">Admin Access</CardTitle>
           <CardDescription>
-            Enter the passcode to access the admin dashboard
+            {isAuthenticating 
+              ? 'Authenticating with Internet Identity...' 
+              : 'Enter the admin passcode to continue'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -55,33 +47,25 @@ export default function PasscodeEntry() {
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
                 placeholder="Enter passcode"
+                disabled={isAuthenticating}
                 autoFocus
-                disabled={isSubmitting}
-                className="text-center text-lg tracking-widest"
               />
+              {error && (
+                <p className="text-sm text-destructive">{error}</p>
+              )}
             </div>
-
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isSubmitting || !passcode}
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={!passcode || isAuthenticating}
             >
-              {isSubmitting ? (
+              {isAuthenticating ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Verifying...
+                  Authenticating...
                 </>
               ) : (
-                <>
-                  <Lock className="w-4 h-4 mr-2" />
-                  Unlock Admin
-                </>
+                'Unlock'
               )}
             </Button>
           </form>
