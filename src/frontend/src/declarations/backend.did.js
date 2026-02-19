@@ -29,9 +29,11 @@ export const PadaInfo = IDL.Record({
   'description' : IDL.Text,
 });
 export const Nakshatra = IDL.Record({
+  'karmicLesson' : IDL.Text,
   'rulingDeity' : IDL.Text,
   'name' : IDL.Text,
   'description' : IDL.Text,
+  'lunarClimate' : IDL.Text,
   'pada1' : PadaInfo,
   'pada2' : PadaInfo,
   'pada3' : PadaInfo,
@@ -114,9 +116,11 @@ export const idlFactory = ({ IDL }) => {
   });
   const PadaInfo = IDL.Record({ 'title' : IDL.Text, 'description' : IDL.Text });
   const Nakshatra = IDL.Record({
+    'karmicLesson' : IDL.Text,
     'rulingDeity' : IDL.Text,
     'name' : IDL.Text,
     'description' : IDL.Text,
+    'lunarClimate' : IDL.Text,
     'pada1' : PadaInfo,
     'pada2' : PadaInfo,
     'pada3' : PadaInfo,

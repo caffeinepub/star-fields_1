@@ -1,11 +1,13 @@
 import { Link } from '@tanstack/react-router';
-import { Moon, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Moon, Sparkles, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useCurrentNakshatra } from '../hooks/useCurrentNakshatra';
+import { useNakshatraByName } from '../hooks/useQueries';
 import { getPadaInfo } from '../utils/padaData';
 
 export default function CurrentNakshatraBanner() {
   const currentNakshatra = useCurrentNakshatra();
+  const { data: nakshatraData, isLoading } = useNakshatraByName(currentNakshatra.name);
   const [isExpanded, setIsExpanded] = useState(false);
   
   const padaInfo = getPadaInfo(currentNakshatra.name, currentNakshatra.padaNumber);
@@ -38,53 +40,104 @@ export default function CurrentNakshatraBanner() {
           </div>
         </Link>
 
-        {/* Pada Details Section */}
-        {padaInfo && (
-          <div className="border-t border-primary/20">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full px-6 py-4 flex items-center justify-between hover:bg-primary/5 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                <div className="text-left">
-                  <p className="text-xs font-medium text-accent uppercase tracking-wider">
-                    Current Lunar Climate
-                  </p>
-                  <p className="text-sm font-semibold text-foreground mt-0.5">
-                    Pada {padaInfo.padaNumber} • {padaInfo.navamsaSign} Navamsa • {padaInfo.title}
-                  </p>
-                </div>
+        {/* Lunar Climate Today Section */}
+        <div className="border-t border-primary/20">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full px-6 py-4 flex items-center justify-between hover:bg-primary/5 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <div className="text-left">
+                <p className="text-xs font-medium text-accent uppercase tracking-wider">
+                  Lunar Climate Today
+                </p>
+                <p className="text-sm font-semibold text-foreground mt-0.5">
+                  {padaInfo && `Pada ${padaInfo.padaNumber} • ${padaInfo.navamsaSign} Navamsa`}
+                </p>
               </div>
-              {isExpanded ? (
-                <ChevronUp className="w-5 h-5 text-muted-foreground" />
-              ) : (
-                <ChevronDown className="w-5 h-5 text-muted-foreground" />
-              )}
-            </button>
-
-            {/* Expanded Description */}
-            {isExpanded && (
-              <div className="px-6 pb-6 pt-2">
-                <div className="bg-background/50 rounded-lg p-4 border border-primary/10">
-                  <div className="flex items-start gap-2 mb-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
-                    <p className="text-xs font-medium text-accent uppercase tracking-wider">
-                      {padaInfo.degreeRange}
-                    </p>
-                  </div>
-                  <div className="prose prose-sm prose-invert max-w-none">
-                    {padaInfo.description.split('\n\n').map((paragraph, index) => (
-                      <p key={index} className="text-sm text-muted-foreground leading-relaxed mb-3 last:mb-0">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            </div>
+            {isExpanded ? (
+              <ChevronUp className="w-5 h-5 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-muted-foreground" />
             )}
-          </div>
-        )}
+          </button>
+
+          {/* Expanded Content */}
+          {isExpanded && (
+            <div className="px-6 pb-6 pt-2">
+              {isLoading ? (
+                <div className="bg-background/50 rounded-lg p-4 border border-primary/10 flex items-center justify-center">
+                  <Loader2 className="w-5 h-5 animate-spin text-muted-foreground mr-2" />
+                  <p className="text-sm text-muted-foreground">Loading climate data...</p>
+                </div>
+              ) : nakshatraData ? (
+                <div className="space-y-4">
+                  {/* Lunar Climate Description */}
+                  {nakshatraData.lunarClimate && (
+                    <div className="bg-background/50 rounded-lg p-4 border border-primary/10">
+                      <div className="flex items-start gap-2 mb-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                        <p className="text-xs font-medium text-accent uppercase tracking-wider">
+                          Atmosphere
+                        </p>
+                      </div>
+                      <p className="text-sm text-foreground leading-relaxed italic">
+                        {nakshatraData.lunarClimate}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Karmic Lesson */}
+                  {nakshatraData.karmicLesson && (
+                    <div className="bg-background/50 rounded-lg p-4 border border-accent/20">
+                      <div className="flex items-start gap-2 mb-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                        <p className="text-xs font-medium text-accent uppercase tracking-wider">
+                          Karmic Lesson
+                        </p>
+                      </div>
+                      <p className="text-sm text-foreground leading-relaxed font-medium">
+                        {nakshatraData.karmicLesson}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Pada Details */}
+                  {padaInfo && (
+                    <div className="bg-background/50 rounded-lg p-4 border border-primary/10">
+                      <div className="flex items-start gap-2 mb-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                        <div>
+                          <p className="text-xs font-medium text-accent uppercase tracking-wider">
+                            {padaInfo.degreeRange}
+                          </p>
+                          <p className="text-sm font-semibold text-foreground mt-1">
+                            {padaInfo.title}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="prose prose-sm prose-invert max-w-none">
+                        {padaInfo.description.split('\n\n').map((paragraph, index) => (
+                          <p key={index} className="text-sm text-muted-foreground leading-relaxed mb-3 last:mb-0">
+                            {paragraph}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-background/50 rounded-lg p-4 border border-primary/10">
+                  <p className="text-sm text-muted-foreground text-center">
+                    Climate data not available
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

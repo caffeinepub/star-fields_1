@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-ensure-the-admin-authentication-state-from-usepasscodeauth-properly-authorizes-backend-write-operations-for-both-nakshatra-data-updates-and-image-replacements",
-      "featureTitle": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
+      "featureId": "feature-update-currentnakshatrabanner-component-to-display-the-lunar-climate-description-and-karmic-lesson-for-the-currently-transiting-nakshatra-in-the-expandable-pada-details-section-replacing-or-augmenting-the-current-interpretive-description",
+      "featureTitle": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
       "files": [
-        "frontend/src/hooks/usePasscodeAuth.ts"
+        "frontend/src/components/CurrentNakshatraBanner.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,7 +17,27 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-admin-edit-page-to-allow-editing-of-the-new-lunarclimate-and-karmiclesson-fields-for-each-nakshatra",
+      "featureTitle": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
+      "files": [
+        "frontend/src/pages/AdminEditPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
       ],
       "confidence": "high"
     }

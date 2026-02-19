@@ -1,18 +1,27 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
-  "known_issues": [
-    "Admin dashboard shows 'only administrators can replace Nakshatra images' error when attempting to save edits and update images"
+  "summary": "Vedic astrology web app with dynamic lunar climate descriptions that change based on current Moon nakshatra transit",
+  "architectural_notes": [
+    "Lunar Climate Today displays nakshatra-specific content based on current Moon transit position",
+    "Each of 27 Nakshatras has unique atmospheric description and karmic lesson"
   ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-ensure-the-admin-authentication-state-from-usepasscodeauth-properly-authorizes-backend-write-operations-for-both-nakshatra-data-updates-and-image-replacements",
-      "title": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
+      "id": "feature-update-currentnakshatrabanner-component-to-display-the-lunar-climate-description-and-karmic-lesson-for-the-currently-transiting-nakshatra-in-the-expandable-pada-details-section-replacing-or-augmenting-the-current-interpretive-description",
+      "title": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
       "reqIds": [
-        "REQ-2"
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-edit-page-to-allow-editing-of-the-new-lunarclimate-and-karmiclesson-fields-for-each-nakshatra",
+      "title": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
+      "reqIds": [
+        "REQ-4"
       ],
       "version": 1
     }
@@ -20,28 +29,29 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Fix admin dashboard permissions to allow saving edits and updating Nakshatra images",
+      "summary": "Update Lunar Climate Today content for all 27 Nakshatras with atmospheric descriptions and karmic lessons",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Modify the backend authorization logic to allow authenticated admin users to save edits and replace Nakshatra images without the 'only administrators can replace Nakshatra images' error",
+      "summary": "Update the Nakshatra data structure in backend/main.mo to include two new text fields: 'lunarClimate' (atmospheric daily transit description) and 'karmicLesson' (reflective wisdom for the day)",
       "reqIds": [
         "REQ-1"
       ],
       "status": "pending"
     },
     {
-      "id": "AR-4",
-      "summary": "Verify that the AdminEditPage form successfully submits both Nakshatra data edits and image updates without permission errors",
+      "id": "AR-3",
+      "summary": "Populate all 27 Nakshatras with the provided atmospheric lunar climate descriptions and karmic lessons exactly as specified: Ashwini (fast, instinctive, catalytic momentum / Act with courage but remember sustainability), Bharani (emotional intensity and moral weight / Freedom requires accountability), Krittika (sharpens perception, exposes refinement needs / Growth requires discernment), Rohini (softens with beauty and attachment / Enjoy growth without clinging), Mrigashira (curious and searching, restless / Seek without fleeing), Ardra (storm energy, breaks open truths / Transformation through discomfort), Punarvasu (restores optimism and hope / Resilience is remembering light returns), Pushya (steadies with responsibility and care / Service strengthens the soul), Ashlesha (deepens perception of hidden motives / Use insight for healing not control), Magha (legacy and ancestral themes / Honor lineage with humility), Purva Phalguni (pleasure and artistic flow / Joy is sacred, balance indulgence), Uttara Phalguni (commitment and loyalty / True partnership requires consistency), Hasta (sharpens skill and communication / Mastery through refinement), Chitra (inspires refinement and self-expression / Create with authenticity), Swati (wind-like independence / Freedom needs direction), Vishakha (intensifies ambition / Pursue victory with integrity), Anuradha (devotion and cooperation / Loyalty without losing self), Jyeshtha (power dynamics surface / Leadership requires humility), Mula (uproots illusions / Liberation through releasing false roots), Purva Ashadha (conviction and enthusiasm / Confidence with openness to growth), Uttara Ashadha (discipline and endurance / Victory through sustained effort), Shravana (heightens listening / Wisdom from attentive presence), Dhanishtha (productivity and timing / Align with collective harmony), Shatabhisha (turns inward, analytical / Solitude reveals truths), Purva Bhadrapada (existential intensity / Transformation demands surrender), Uttara Bhadrapada (patience and depth / Stability from inner depth), Revati (softens and closes cycle / Completion is sacred)",
       "reqIds": [
-        "REQ-3"
+        "REQ-2"
       ],
       "status": "pending"
     }
   ],
-  "projectName": "Fix admin dashboard permissions for saving edits and images",
+  "gameProjectType": "none",
+  "projectName": "Star Field Explorer",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

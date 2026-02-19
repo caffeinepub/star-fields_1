@@ -11,9 +11,11 @@ import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
 export interface Nakshatra {
+  'karmicLesson' : string,
   'rulingDeity' : string,
   'name' : string,
   'description' : string,
+  'lunarClimate' : string,
   'pada1' : PadaInfo,
   'pada2' : PadaInfo,
   'pada3' : PadaInfo,

@@ -1,56 +1,68 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T20:22:16.238Z",
+  "generatedAt": "2026-02-19T21:12:33.767Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 1,
+    "total": 4,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Modify the backend authorization logic to allow authenticated admin users to save edits and replace Nakshatra images without the 'only administrators can replace Nakshatra images' error",
+        "summary": "Update the Nakshatra data structure in backend/main.mo to include two new text fields: 'lunarClimate' (atmospheric daily transit description) and 'karmicLesson' (reflective wisdom for the day)",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/usePasscodeAuth.ts",
-          "frontend/src/hooks/useActor.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/usePasscodeAuth.ts"
-        ]
+        "summary": "Populate all 27 Nakshatras with the provided atmospheric lunar climate descriptions and karmic lessons exactly as specified: Ashwini (fast, instinctive, catalytic momentum / Act with courage but remember sustainability), Bharani (emotional intensity and moral weight / Freedom requires accountability), Krittika (sharpens perception, exposes refinement needs / Growth requires discernment), Rohini (softens with beauty and attachment / Enjoy growth without clinging), Mrigashira (curious and searching, restless / Seek without fleeing), Ardra (storm energy, breaks open truths / Transformation through discomfort), Punarvasu (restores optimism and hope / Resilience is remembering light returns), Pushya (steadies with responsibility and care / Service strengthens the soul), Ashlesha (deepens perception of hidden motives / Use insight for healing not control), Magha (legacy and ancestral themes / Honor lineage with humility), Purva Phalguni (pleasure and artistic flow / Joy is sacred, balance indulgence), Uttara Phalguni (commitment and loyalty / True partnership requires consistency), Hasta (sharpens skill and communication / Mastery through refinement), Chitra (inspires refinement and self-expression / Create with authenticity), Swati (wind-like independence / Freedom needs direction), Vishakha (intensifies ambition / Pursue victory with integrity), Anuradha (devotion and cooperation / Loyalty without losing self), Jyeshtha (power dynamics surface / Leadership requires humility), Mula (uproots illusions / Liberation through releasing false roots), Purva Ashadha (conviction and enthusiasm / Confidence with openness to growth), Uttara Ashadha (discipline and endurance / Victory through sustained effort), Shravana (heightens listening / Wisdom from attentive presence), Dhanishtha (productivity and timing / Align with collective harmony), Shatabhisha (turns inward, analytical / Solitude reveals truths), Purva Bhadrapada (existential intensity / Transformation demands surrender), Uttara Bhadrapada (patience and depth / Stability from inner depth), Revati (softens and closes cycle / Completion is sacred)",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-3",
-        "summary": "Verify that the AdminEditPage form successfully submits both Nakshatra data edits and image updates without permission errors",
-        "status": "missing",
+        "summary": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/AdminEditPage.tsx",
-          "frontend/src/hooks/useNakshatraMutations.ts",
-          "frontend/src/components/NakshatraImageUpload.tsx"
+          "frontend/src/components/CurrentNakshatraBanner.tsx",
+          "frontend/src/backend.d.ts"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/components/CurrentNakshatraBanner.tsx",
+          "frontend/src/backend.d.ts"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AdminEditPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/AdminEditPage.tsx"
+        ]
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/AdminLogoutButton.tsx",
-    "frontend/src/components/PasscodeEntry.tsx",
-    "frontend/src/hooks/usePasscodeAuth.ts",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/CurrentNakshatraBanner.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/pages/AdminEditPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

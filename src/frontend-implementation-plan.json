@@ -1,53 +1,44 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix admin dashboard permissions for saving edits and images",
+  "title": "Update Lunar Climate Today content for all 27 Nakshatras",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Ensure admin authentication state properly authorizes backend write operations for Nakshatra updates and image replacements",
+      "id": "REQ-3",
+      "summary": "Display lunar climate description and karmic lesson for the currently transiting Nakshatra in the CurrentNakshatraBanner component",
       "acceptanceCriteria": [
-        "Passcode authentication grants full write permissions for Nakshatra operations",
-        "Image upload and replacement operations succeed when admin is authenticated",
-        "Authorization errors are prevented for all admin write operations"
+        "Lunar climate description is displayed in the current Nakshatra banner",
+        "Karmic lesson is displayed in the current Nakshatra banner",
+        "Content updates automatically when Moon transits to a different Nakshatra",
+        "Display integrates naturally with existing pada details layout"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/usePasscodeAuth.ts",
+          "path": "frontend/src/components/CurrentNakshatraBanner.tsx",
           "operation": "modify",
-          "description": "Review and ensure the passcode authentication hook properly stores and synchronizes admin authentication state across components. Verify that isAuthenticated correctly reflects the admin status needed for backend authorization."
+          "description": "Update the expandable pada details section to display the lunarClimate and karmicLesson fields from the current Nakshatra data. Replace or augment the existing interpretive description with these new fields. Ensure the content updates automatically when the Moon transits to a different Nakshatra by using the existing reactive data flow from useCurrentNakshatra and backend queries."
         },
         {
-          "path": "frontend/src/hooks/useActor.ts",
+          "path": "frontend/src/backend.d.ts",
           "operation": "modify",
-          "description": "Ensure the backend actor is properly configured to include admin authentication credentials when making write operations. Verify that the actor instance passes the necessary authorization context for replaceNakshatraImage and updateNakshatra calls."
+          "description": "Update the Nakshatra interface type definition to include the new lunarClimate and karmicLesson string fields, matching the backend data structure changes. This ensures TypeScript type safety across the frontend."
         }
       ]
     },
     {
-      "id": "REQ-3",
-      "summary": "Verify AdminEditPage form successfully submits Nakshatra data edits and image updates without permission errors",
+      "id": "REQ-4",
+      "summary": "Add editing capability for lunar climate and karmic lesson fields in the admin edit page",
       "acceptanceCriteria": [
-        "Save button on AdminEditPage successfully commits all changes",
-        "Image uploads complete without authorization errors",
-        "Success toast confirmation appears after successful saves",
-        "Updated data and images are immediately reflected in the admin dashboard"
+        "Admin edit form includes textarea for lunar climate",
+        "Admin edit form includes textarea for karmic lesson",
+        "Both fields save successfully via updateNakshatra mutation",
+        "Existing content is displayed when editing a Nakshatra"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/AdminEditPage.tsx",
           "operation": "modify",
-          "description": "Review the form submission logic to ensure it properly calls both updateNakshatra and replaceNakshatraImage with the authenticated context. Verify error handling displays the specific 'only administrators can replace Nakshatra images' error to users. Ensure the mutation hook from useNakshatraMutations is correctly invoked with all required parameters."
-        },
-        {
-          "path": "frontend/src/hooks/useNakshatraMutations.ts",
-          "operation": "modify",
-          "description": "Review the mutation hook to ensure it properly handles both Nakshatra data updates and image replacements in sequence. Verify that authentication state is checked before calling backend methods. Add error handling that distinguishes between authorization errors and other failures. Ensure the mutation invalidates the query cache on success to immediately reflect changes."
-        },
-        {
-          "path": "frontend/src/components/NakshatraImageUpload.tsx",
-          "operation": "modify",
-          "description": "Verify the image upload component properly converts files to Uint8Array format required by the backend. Ensure the component passes the image data correctly to the parent form without loss of authentication context."
+          "description": "Add form fields for lunarClimate and karmicLesson in the admin edit form. Include textarea inputs for both fields with appropriate labels and styling that match the existing form design. Wire the fields into the form state management and ensure they are included in the updateNakshatra mutation payload. Display existing content when editing a Nakshatra."
         }
       ]
     }

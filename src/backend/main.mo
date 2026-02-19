@@ -2,14 +2,15 @@ import Map "mo:core/Map";
 import Text "mo:core/Text";
 import Iter "mo:core/Iter";
 import Principal "mo:core/Principal";
-import Runtime "mo:core/Runtime";
 import Blob "mo:core/Blob";
+import Runtime "mo:core/Runtime";
 import MixinStorage "blob-storage/Mixin";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
+import Migration "migration";
 
-// No migration necessary as this file got updated correctly and all changes here are persistent
-
+// Apply migration with with clause.
+(with migration = Migration.run)
 actor {
   include MixinStorage();
 
@@ -51,6 +52,7 @@ actor {
     description : Text;
   };
 
+  // New Nakshatra type with additional fields
   type Nakshatra = {
     name : Text;
     imageId : ?Text;
@@ -58,6 +60,8 @@ actor {
     rulingDeity : Text;
     symbol : Text;
     characteristics : Text;
+    lunarClimate : Text;
+    karmicLesson : Text;
     pada1 : PadaInfo;
     pada2 : PadaInfo;
     pada3 : PadaInfo;
@@ -70,7 +74,6 @@ actor {
   let imageStore = Map.empty<Text, Blob>();
   var nextImageId = 1;
 
-  // CRUD operations for Nakshatras
   // Admin-only: Create new Nakshatra
   public shared ({ caller }) func createNakshatra(nakshatra : Nakshatra) : async Bool {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
@@ -80,17 +83,38 @@ actor {
     true;
   };
 
-  // Public read: Anyone can read Nakshatra data
+  // Public: Read Nakshatra
   public query ({ caller }) func readNakshatra(name : Text) : async ?Nakshatra {
     nakshatraMap.get(name);
   };
 
-  // Admin-only: Update existing Nakshatra
+  // User-only: Update Nakshatra (excluding image)
   public shared ({ caller }) func updateNakshatra(nakshatra : Nakshatra) : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can update Nakshatras");
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can update Nakshatras");
     };
-    nakshatraMap.add(nakshatra.name, nakshatra);
+    switch (nakshatraMap.get(nakshatra.name)) {
+      case (null) {
+        Runtime.trap("Nakshatra not found");
+      };
+      case (?existingNakshatra) {
+        let updatedNakshatra : Nakshatra = {
+          name = nakshatra.name;
+          imageId = existingNakshatra.imageId;
+          description = nakshatra.description;
+          rulingDeity = nakshatra.rulingDeity;
+          symbol = nakshatra.symbol;
+          characteristics = nakshatra.characteristics;
+          lunarClimate = nakshatra.lunarClimate;
+          karmicLesson = nakshatra.karmicLesson;
+          pada1 = nakshatra.pada1;
+          pada2 = nakshatra.pada2;
+          pada3 = nakshatra.pada3;
+          pada4 = nakshatra.pada4;
+        };
+        nakshatraMap.add(nakshatra.name, updatedNakshatra);
+      };
+    };
     true;
   };
 
@@ -135,10 +159,10 @@ actor {
     filtered.toArray();
   };
 
-  // Admin-only: Replace Nakshatra image
+  // User-only: Replace Nakshatra image
   public shared ({ caller }) func replaceNakshatraImage(nakshatraName : Text, imageData : Blob) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can replace images");
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can replace images");
     };
 
     switch (nakshatraMap.get(nakshatraName)) {

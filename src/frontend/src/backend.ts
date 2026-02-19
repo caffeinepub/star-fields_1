@@ -90,9 +90,11 @@ export class ExternalBlob {
     }
 }
 export interface Nakshatra {
+    karmicLesson: string;
     rulingDeity: string;
     name: string;
     description: string;
+    lunarClimate: string;
     pada1: PadaInfo;
     pada2: PadaInfo;
     pada3: PadaInfo;
@@ -518,9 +520,11 @@ function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Ar
     return value.length === 0 ? null : value[0];
 }
 function from_candid_record_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    karmicLesson: string;
     rulingDeity: string;
     name: string;
     description: string;
+    lunarClimate: string;
     pada1: _PadaInfo;
     pada2: _PadaInfo;
     pada3: _PadaInfo;
@@ -529,9 +533,11 @@ function from_candid_record_n14(_uploadFile: (file: ExternalBlob) => Promise<Uin
     characteristics: string;
     symbol: string;
 }): {
+    karmicLesson: string;
     rulingDeity: string;
     name: string;
     description: string;
+    lunarClimate: string;
     pada1: PadaInfo;
     pada2: PadaInfo;
     pada3: PadaInfo;
@@ -541,9 +547,11 @@ function from_candid_record_n14(_uploadFile: (file: ExternalBlob) => Promise<Uin
     symbol: string;
 } {
     return {
+        karmicLesson: value.karmicLesson,
         rulingDeity: value.rulingDeity,
         name: value.name,
         description: value.description,
+        lunarClimate: value.lunarClimate,
         pada1: value.pada1,
         pada2: value.pada2,
         pada3: value.pada3,
@@ -590,9 +598,11 @@ function to_candid_opt_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Arra
     return value === null ? candid_none() : candid_some(to_candid__CaffeineStorageRefillInformation_n2(_uploadFile, _downloadFile, value));
 }
 function to_candid_record_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    karmicLesson: string;
     rulingDeity: string;
     name: string;
     description: string;
+    lunarClimate: string;
     pada1: PadaInfo;
     pada2: PadaInfo;
     pada3: PadaInfo;
@@ -601,9 +611,11 @@ function to_candid_record_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8
     characteristics: string;
     symbol: string;
 }): {
+    karmicLesson: string;
     rulingDeity: string;
     name: string;
     description: string;
+    lunarClimate: string;
     pada1: _PadaInfo;
     pada2: _PadaInfo;
     pada3: _PadaInfo;
@@ -613,9 +625,11 @@ function to_candid_record_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8
     symbol: string;
 } {
     return {
+        karmicLesson: value.karmicLesson,
         rulingDeity: value.rulingDeity,
         name: value.name,
         description: value.description,
+        lunarClimate: value.lunarClimate,
         pada1: value.pada1,
         pada2: value.pada2,
         pada3: value.pada3,

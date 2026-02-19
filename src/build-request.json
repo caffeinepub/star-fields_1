@@ -1,73 +1,91 @@
 {
   "kind": "build_request",
-  "title": "Fix admin dashboard permissions for saving edits and images",
-  "priority": "high",
+  "title": "Update Lunar Climate Today content for all 27 Nakshatras",
+  "projectName": "Star Field Explorer",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Modify the backend authorization logic to allow authenticated admin users to save edits and replace Nakshatra images without the 'only administrators can replace Nakshatra images' error",
+      "text": "Update the Nakshatra data structure in backend/main.mo to include two new text fields: 'lunarClimate' (atmospheric daily transit description) and 'karmicLesson' (reflective wisdom for the day)",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-10"
         ],
         "quotes": [
-          "error: only adminstrators can replace Nakshatra images"
+          "Ashwini days feel fast, instinctive, and catalytic...",
+          "Karmic lesson: Act with courage — but remember that beginnings require sustainability, not just speed."
         ]
       },
       "acceptanceCriteria": [
-        "Admin users authenticated via passcode can successfully save Nakshatra edits",
-        "Admin users can replace Nakshatra images without authorization errors",
-        "The 'only administrators can replace Nakshatra images' error no longer occurs for authenticated admins"
+        "Nakshatra type includes lunarClimate field as Text",
+        "Nakshatra type includes karmicLesson field as Text",
+        "Both fields are persisted in stable storage"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Ensure the admin authentication state from usePasscodeAuth properly authorizes backend write operations for both Nakshatra data updates and image replacements",
-      "target": "both",
+      "text": "Populate all 27 Nakshatras with the provided atmospheric lunar climate descriptions and karmic lessons exactly as specified: Ashwini (fast, instinctive, catalytic momentum / Act with courage but remember sustainability), Bharani (emotional intensity and moral weight / Freedom requires accountability), Krittika (sharpens perception, exposes refinement needs / Growth requires discernment), Rohini (softens with beauty and attachment / Enjoy growth without clinging), Mrigashira (curious and searching, restless / Seek without fleeing), Ardra (storm energy, breaks open truths / Transformation through discomfort), Punarvasu (restores optimism and hope / Resilience is remembering light returns), Pushya (steadies with responsibility and care / Service strengthens the soul), Ashlesha (deepens perception of hidden motives / Use insight for healing not control), Magha (legacy and ancestral themes / Honor lineage with humility), Purva Phalguni (pleasure and artistic flow / Joy is sacred, balance indulgence), Uttara Phalguni (commitment and loyalty / True partnership requires consistency), Hasta (sharpens skill and communication / Mastery through refinement), Chitra (inspires refinement and self-expression / Create with authenticity), Swati (wind-like independence / Freedom needs direction), Vishakha (intensifies ambition / Pursue victory with integrity), Anuradha (devotion and cooperation / Loyalty without losing self), Jyeshtha (power dynamics surface / Leadership requires humility), Mula (uproots illusions / Liberation through releasing false roots), Purva Ashadha (conviction and enthusiasm / Confidence with openness to growth), Uttara Ashadha (discipline and endurance / Victory through sustained effort), Shravana (heightens listening / Wisdom from attentive presence), Dhanishtha (productivity and timing / Align with collective harmony), Shatabhisha (turns inward, analytical / Solitude reveals truths), Purva Bhadrapada (existential intensity / Transformation demands surrender), Uttara Bhadrapada (patience and depth / Stability from inner depth), Revati (softens and closes cycle / Completion is sacred)",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "please allow me to make exits and save new images in the admin dashboard"
+          "msg-10"
         ]
       },
       "acceptanceCriteria": [
-        "Passcode authentication grants full write permissions for Nakshatra operations",
-        "Image upload and replacement operations succeed when admin is authenticated",
-        "Authorization errors are prevented for all admin write operations"
+        "All 27 Nakshatras have lunarClimate text populated with atmospheric descriptions",
+        "All 27 Nakshatras have karmicLesson text populated with wisdom statements",
+        "Content matches the provided descriptions exactly for each Nakshatra"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Verify that the AdminEditPage form successfully submits both Nakshatra data edits and image updates without permission errors",
+      "text": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-10",
+          "msg-12"
         ],
         "quotes": [
-          "It is currently not allowing me to save the edits and updated images"
+          "content changes based on which Nakshatra the Moon is currently transiting"
         ]
       },
       "acceptanceCriteria": [
-        "Save button on AdminEditPage successfully commits all changes",
-        "Image uploads complete without authorization errors",
-        "Success toast confirmation appears after successful saves",
-        "Updated data and images are immediately reflected in the admin dashboard"
+        "Lunar climate description is displayed in the current Nakshatra banner",
+        "Karmic lesson is displayed in the current Nakshatra banner",
+        "Content updates automatically when Moon transits to a different Nakshatra",
+        "Display integrates naturally with existing pada details layout"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-10"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin edit form includes textarea for lunar climate",
+        "Admin edit form includes textarea for karmic lesson",
+        "Both fields save successfully via updateNakshatra mutation",
+        "Existing content is displayed when editing a Nakshatra"
       ]
     }
   ],
   "constraints": [
-    "Maintain the existing passcode-based authentication system",
-    "Do not break the current admin authentication flow",
-    "Preserve all existing Nakshatra data and images"
+    "Preserve existing Nakshatra data structure and fields",
+    "Do not modify the nakshatraEngine astronomical calculations",
+    "Maintain existing authentication and authorization patterns",
+    "Keep the expandable pada details interaction pattern in CurrentNakshatraBanner"
   ],
   "nonGoals": [
-    "Changing the authentication mechanism from passcode to Internet Identity",
-    "Adding role-based access control beyond admin/non-admin",
-    "Modifying the frontend UI layout or styling"
+    "Changing how the current Nakshatra is calculated",
+    "Modifying the overall page layout or navigation structure",
+    "Adding new pages or routes",
+    "Changing the visual design or color scheme"
   ],
   "imageRequirements": {
     "required": [],

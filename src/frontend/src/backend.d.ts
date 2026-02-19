@@ -8,9 +8,11 @@ export interface None {
 }
 export type Option<T> = Some<T> | None;
 export interface Nakshatra {
+    karmicLesson: string;
     rulingDeity: string;
     name: string;
     description: string;
+    lunarClimate: string;
     pada1: PadaInfo;
     pada2: PadaInfo;
     pada3: PadaInfo;

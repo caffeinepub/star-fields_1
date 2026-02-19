@@ -17,14 +17,7 @@ export function useUpdateNakshatra() {
 
       // If there's a new image to upload, handle it first
       if (imageData) {
-        try {
-          await actor.replaceNakshatraImage(nakshatra.name, imageData);
-        } catch (error) {
-          if (error instanceof Error && error.message.includes('Unauthorized')) {
-            throw new Error('Only administrators can replace Nakshatra images');
-          }
-          throw error;
-        }
+        await actor.replaceNakshatraImage(nakshatra.name, imageData);
       }
 
       // Update the nakshatra data

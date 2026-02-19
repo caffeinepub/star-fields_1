@@ -32,6 +32,8 @@ export default function AdminEditPage() {
     rulingDeity: '',
     symbol: '',
     characteristics: '',
+    lunarClimate: '',
+    karmicLesson: '',
     pada1: { title: '', description: '' },
     pada2: { title: '', description: '' },
     pada3: { title: '', description: '' },
@@ -238,6 +240,43 @@ export default function AdminEditPage() {
                   rows={3}
                   required
                 />
+              </div>
+
+              <Separator className="my-8" />
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Lunar Climate Today</h3>
+                <p className="text-sm text-muted-foreground">
+                  Define the atmospheric quality and karmic lesson for this Nakshatra's daily transit.
+                </p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="lunarClimate">Lunar Climate Description</Label>
+                  <Textarea
+                    id="lunarClimate"
+                    value={formData.lunarClimate}
+                    onChange={(e) => setFormData({ ...formData, lunarClimate: e.target.value })}
+                    placeholder="e.g., fast, instinctive, catalytic momentum"
+                    rows={3}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Describe the emotional and energetic atmosphere when the Moon transits this Nakshatra.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="karmicLesson">Karmic Lesson</Label>
+                  <Textarea
+                    id="karmicLesson"
+                    value={formData.karmicLesson}
+                    onChange={(e) => setFormData({ ...formData, karmicLesson: e.target.value })}
+                    placeholder="e.g., Act with courage but remember sustainability"
+                    rows={3}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    The wisdom or teaching associated with this Nakshatra's energy.
+                  </p>
+                </div>
               </div>
 
               <Separator className="my-8" />

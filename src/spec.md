@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Fix admin dashboard permissions to allow authenticated admins to save Nakshatra edits and replace images without authorization errors.
+**Goal:** Add daily atmospheric transit descriptions and karmic wisdom to all 27 Nakshatras, displayed in the Current Nakshatra banner.
 
 **Planned changes:**
-- Update backend authorization logic to recognize authenticated admin users for write operations
-- Ensure passcode authentication properly grants permissions for Nakshatra data updates and image replacements
-- Fix the AdminEditPage form submission to complete successfully without permission errors
+- Add lunarClimate and karmicLesson text fields to Nakshatra data structure in backend
+- Populate all 27 Nakshatras with atmospheric descriptions and karmic lessons
+- Display lunar climate and karmic lesson in CurrentNakshatraBanner expandable pada details
+- Add lunar climate and karmic lesson fields to admin edit page
 
-**User-visible outcome:** Authenticated admin users can save Nakshatra edits and upload/replace images in the admin dashboard without encountering "only administrators can replace Nakshatra images" errors.
+**User-visible outcome:** Users see daily atmospheric descriptions and karmic wisdom for the currently transiting Nakshatra in the banner. Admins can edit these fields for each Nakshatra.
