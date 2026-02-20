@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Implement automatic data synchronization from the live canister to draft canister, allowing admins to sync all Nakshatra text content and uploaded images with a single button click.
+**Goal:** Fix backend initialization bug to automatically seed Nakshatra data on first deployment.
 
 **Planned changes:**
-- Add backend export functions to retrieve all Nakshatra data and images from the live canister
-- Add backend import functions to replace all Nakshatra data and images in the draft canister
-- Create frontend sync utility that fetches data from live and imports it into draft
-- Add "Sync from Live" button in the admin panel with progress feedback
-- Display sync status information showing last sync timestamp and whether draft is in sync with live
+- Modify backend/main.mo to detect empty Nakshatra storage on initialization
+- Automatically trigger migration seeding when no data exists
+- Add initialization logging to track seeding events and report success/failure
+- Ensure all 27 Nakshatras are populated with complete data from migration.mo
 
-**User-visible outcome:** Admins can click a "Sync from Live" button in the admin panel to automatically copy all Nakshatra content and images from the live app into their draft, seeing progress updates and sync status information.
+**User-visible outcome:** Admin dashboard displays all Nakshatra entries without "No Data Available" error on first deployment.

@@ -1,101 +1,48 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-20T01:37:52.962Z",
+  "generatedAt": "2026-02-20T03:32:48.636Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
-    "implemented": 3,
+    "total": 3,
+    "implemented": 0,
     "items": [
       {
-        "id": "REQ-1",
-        "summary": "Add a backend function to export all Nakshatra data including text content (name, description, deity, symbol, characteristics, lunarClimate, karmicLesson, and all four pada descriptions) and return it as a serializable data structure",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Add a backend function to export all uploaded image blobs with their associated Nakshatra IDs, returning image data and metadata in a format suitable for cross-canister transfer",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Add a backend import function that accepts Nakshatra data and replaces all existing Nakshatra entries, ensuring imported data completely overwrites current state",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
         "id": "REQ-4",
-        "summary": "Add a backend import function that accepts image data with IDs and stores all imported images, replacing any existing images with matching IDs",
+        "summary": "Modify backend/main.mo to check if Nakshatra storage is empty on initialization and automatically trigger migration seeding if no data exists",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-5",
-        "summary": "Create a frontend admin utility that automatically fetches all data from the live canister and imports it into the draft canister when triggered, implementing the complete sync workflow",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useSyncFromLive.ts",
-          "frontend/src/utils/canisterConfig.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useSyncFromLive.ts",
-          "frontend/src/utils/canisterConfig.ts"
-        ]
+        "summary": "Add initialization logging to backend/main.mo to track when migration seeding occurs and report success or failure",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-6",
-        "summary": "Add a 'Sync from Live' button in the admin panel that triggers the automatic data synchronization from live to draft, displaying sync progress and completion status",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/SyncFromLiveButton.tsx",
-          "frontend/src/pages/AdminPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/SyncFromLiveButton.tsx",
-          "frontend/src/pages/AdminPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Update the AdminPage to display sync status information showing when the last sync occurred and whether draft data is in sync with live data",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/SyncStatusDisplay.tsx",
-          "frontend/src/pages/AdminPage.tsx",
-          "frontend/src/hooks/useSyncFromLive.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/SyncStatusDisplay.tsx",
-          "frontend/src/pages/AdminPage.tsx",
-          "frontend/src/hooks/useSyncFromLive.ts"
-        ]
+        "summary": "Ensure migration.mo seeding logic is invoked during backend initialization when storage is empty, populating all 27 Nakshatras with their complete astronomical and mythological data",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
-    "frontend/src/components/SyncFromLiveButton.tsx",
-    "frontend/src/components/SyncStatusDisplay.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useSyncFromLive.ts",
-    "frontend/src/pages/AdminPage.tsx",
-    "frontend/src/utils/canisterConfig.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

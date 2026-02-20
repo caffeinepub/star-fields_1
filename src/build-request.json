@@ -1,159 +1,67 @@
 {
   "kind": "build_request",
-  "title": "Implement automatic live-to-draft data synchronization",
-  "projectName": "Star Field Explorer",
+  "title": "Fix backend initialization bug preventing Nakshatra data availability",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Add a backend function to export all Nakshatra data including text content (name, description, deity, symbol, characteristics, lunarClimate, karmicLesson, and all four pada descriptions) and return it as a serializable data structure",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "ALL data from live (all nakshatra text + all uploaded images)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes a query function that returns complete Nakshatra data for all 27 entries",
-        "Exported data includes all text fields and references to associated image IDs",
-        "Function is callable by authenticated users with appropriate permissions"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Add a backend function to export all uploaded image blobs with their associated Nakshatra IDs, returning image data and metadata in a format suitable for cross-canister transfer",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "ALL data from live (all nakshatra text + all uploaded images)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes a query function that returns all stored image blobs with their IDs",
-        "Image data is returned in a format that can be imported into another canister",
-        "Function handles large image payloads efficiently"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Add a backend import function that accepts Nakshatra data and replaces all existing Nakshatra entries, ensuring imported data completely overwrites current state",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "always live",
-          "all data uploaded in the live app will be synced in future drafts"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes an update function that accepts complete Nakshatra dataset",
-        "Import function completely replaces existing Nakshatra data with imported data",
-        "Live data always takes priority over any existing draft data",
-        "Function is restricted to authenticated admin users"
-      ]
-    },
-    {
       "id": "REQ-4",
-      "text": "Add a backend import function that accepts image data with IDs and stores all imported images, replacing any existing images with matching IDs",
+      "text": "Modify backend/main.mo to check if Nakshatra storage is empty on initialization and automatically trigger migration seeding if no data exists",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-final"
+          "msg-user-final"
         ],
         "quotes": [
-          "ALL data from live (all nakshatra text + all uploaded images)",
-          "always live"
+          "please initialize the backend. No data available. fix this bug"
         ]
       },
       "acceptanceCriteria": [
-        "Backend exposes an update function that accepts image data with IDs",
-        "Import function stores all images and overwrites any existing images with the same ID",
-        "Function handles large image payloads efficiently",
-        "Function is restricted to authenticated admin users"
+        "Backend automatically detects empty Nakshatra storage on first deployment or upgrade",
+        "Migration seeding runs automatically when storage is empty",
+        "All 27 Nakshatras are populated with complete data from migration.mo",
+        "Admin dashboard displays all Nakshatra entries without 'No Data Available' error"
       ]
     },
     {
       "id": "REQ-5",
-      "text": "Create a frontend admin utility that automatically fetches all data from the live canister and imports it into the draft canister when triggered, implementing the complete sync workflow",
-      "target": "frontend",
+      "text": "Add initialization logging to backend/main.mo to track when migration seeding occurs and report success or failure",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "automatically",
-          "ALL data from live (all nakshatra text + all uploaded images)",
-          "all data uploaded in the live app will be synced in future drafts"
+          "msg-user-final"
         ]
       },
       "acceptanceCriteria": [
-        "Frontend implements logic to call live canister export functions",
-        "Frontend calls draft canister import functions with exported data",
-        "Sync process handles both Nakshatra text data and image blobs",
-        "Sync shows progress feedback to admin users",
-        "Error handling provides clear messages if sync fails"
+        "Backend logs initialization events including storage state checks",
+        "Migration execution is logged with count of seeded Nakshatras",
+        "Any initialization failures are logged with clear error messages"
       ]
     },
     {
       "id": "REQ-6",
-      "text": "Add a 'Sync from Live' button in the admin panel that triggers the automatic data synchronization from live to draft, displaying sync progress and completion status",
-      "target": "frontend",
+      "text": "Ensure migration.mo seeding logic is invoked during backend initialization when storage is empty, populating all 27 Nakshatras with their complete astronomical and mythological data",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "automatically",
-          "all data uploaded in the live app will be synced in future drafts"
+          "msg-user-final"
         ]
       },
       "acceptanceCriteria": [
-        "Admin panel includes a clearly labeled sync button",
-        "Button shows loading state during sync operation",
-        "Success message confirms when sync completes",
-        "Error messages display if sync fails with actionable guidance"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Update the AdminPage to display sync status information showing when the last sync occurred and whether draft data is in sync with live data",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "all data uploaded in the live app will be synced in future drafts"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin page shows timestamp of last successful sync",
-        "UI indicates if draft data differs from live data",
-        "Sync status updates automatically after sync operations complete"
+        "Migration seeding runs automatically on empty storage",
+        "All 27 Nakshatras are created with name, description, deity, symbol, ruling planet, pada information, lunarClimate, and karmicLesson fields",
+        "Frontend can successfully fetch and display all Nakshatra data after initialization"
       ]
     }
   ],
   "constraints": [
-    "Do not modify the existing Nakshatra data structure in backend/main.mo",
-    "Live canister data must always take priority over draft data during sync",
-    "Sync operations must handle large image payloads without timeout errors",
-    "Export and import functions must preserve all Nakshatra fields including pada descriptions"
+    "Respect single-actor architecture in backend/main.mo",
+    "Use existing migration.mo data structures and seeding logic",
+    "Do not modify frontend files in immutablePaths list"
   ],
   "nonGoals": [
-    "Bidirectional sync (draft to live)",
-    "Selective sync of individual Nakshatras",
-    "Manual conflict resolution UI",
-    "Automatic sync on draft creation without admin trigger",
-    "Version history or rollback functionality",
-    "Real-time sync or webhook-based sync"
+    "Adding new Nakshatra data fields beyond what exists in migration.mo",
+    "Changing frontend UI components or styling",
+    "Implementing manual admin initialization controls"
   ],
   "imageRequirements": {
     "required": [],

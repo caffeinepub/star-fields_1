@@ -6,8 +6,6 @@ import { Edit, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { useNakshatras, useGetNakshatraImage } from '../hooks/useQueries';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import AdminLogoutButton from '../components/AdminLogoutButton';
-import SyncFromLiveButton from '../components/SyncFromLiveButton';
-import SyncStatusDisplay from '../components/SyncStatusDisplay';
 
 function NakshatraImage({ imageId, name }: { imageId?: string; name: string }) {
   const { data: imageUrl, isLoading } = useGetNakshatraImage(imageId);
@@ -127,23 +125,6 @@ export default function AdminPage() {
             </p>
           </div>
           <AdminLogoutButton />
-        </div>
-
-        {/* Sync Management Section */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <SyncFromLiveButton />
-            <div className="flex-1 w-full sm:w-auto">
-              <SyncStatusDisplay />
-            </div>
-          </div>
-          <div className="text-sm text-muted-foreground bg-muted/30 p-4 rounded-lg border">
-            <p className="font-medium mb-1">About Sync:</p>
-            <p>
-              Use "Sync from Live" to pull all Nakshatra content and images from the live application into this draft. 
-              This ensures your draft has the latest admin edits made in production.
-            </p>
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

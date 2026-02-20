@@ -1,80 +1,64 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "Astrology/Nakshatra app with automatic live-to-draft data synchronization system",
-  "architectural_notes": [
-    "Live-to-draft data sync: automatic on draft creation, pulls all nakshatra text and uploaded images",
-    "Conflict resolution: live data always takes priority over draft data"
+  "projectStateVersion": 5,
+  "summary": "New project",
+  "architectural_notes": [],
+  "known_issues": [
+    "Bug: 'No Data Available / No Nakshatras found' error indicates backend may need initialization"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
-  "existing_features": [
-    {
-      "id": "feature-create-a-frontend-admin-utility-that-automatically-fetches-all-data-from-the-live-canister-and-imports-it-into-the-draft-canister-when-triggered-implementing-the-complete-sync-workflow",
-      "title": "Create a frontend admin utility that automatically fetches all data from the live canister and imports it into the draft canister when triggered, implementing the complete sync workflow",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-sync-from-live-button-in-the-admin-panel-that-triggers-the-automatic-data-synchronization-from-live-to-draft-displaying-sync-progress-and-completion-status",
-      "title": "Add a 'Sync from Live' button in the admin panel that triggers the automatic data synchronization from live to draft, displaying sync progress and completion status",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-adminpage-to-display-sync-status-information-showing-when-the-last-sync-occurred-and-whether-draft-data-is-in-sync-with-live-data",
-      "title": "Update the AdminPage to display sync status information showing when the last sync occurred and whether draft data is in sync with live data",
-      "reqIds": [
-        "REQ-7"
-      ],
-      "version": 1
-    }
-  ],
+  "isFixRequest": true,
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Automatic data sync from live to draft (nakshatra text + images, live always wins)",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Add a backend function to export all Nakshatra data including text content (name, description, deity, symbol, characteristics, lunarClimate, karmicLesson, and all four pada descriptions) and return it as a serializable data structure",
+      "summary": "Diagnose and fix the backend initialization issue preventing Nakshatra data from being available, ensuring all 27 Nakshatras are properly initialized with their complete data including name, description, deity, symbol, ruling planet, pada information, lunarClimate, and karmicLesson fields",
       "reqIds": [
         "REQ-1"
       ],
       "status": "pending"
     },
     {
-      "id": "AR-3",
-      "summary": "Add a backend function to export all uploaded image blobs with their associated Nakshatra IDs, returning image data and metadata in a format suitable for cross-canister transfer",
+      "id": "AR-2",
+      "summary": "Ensure the migration logic properly transforms any existing data and initializes missing Nakshatras if the backend storage is empty or incomplete",
       "reqIds": [
         "REQ-2"
       ],
       "status": "pending"
     },
     {
-      "id": "AR-4",
-      "summary": "Add a backend import function that accepts Nakshatra data and replaces all existing Nakshatra entries, ensuring imported data completely overwrites current state",
+      "id": "AR-3",
+      "summary": "Add defensive error handling to gracefully handle and log initialization failures, providing clear feedback if data seeding or migration encounters issues",
       "reqIds": [
         "REQ-3"
       ],
       "status": "pending"
     },
     {
-      "id": "AR-5",
-      "summary": "Add a backend import function that accepts image data with IDs and stores all imported images, replacing any existing images with matching IDs",
+      "id": "AR-4",
+      "summary": "Modify backend/main.mo to check if Nakshatra storage is empty on initialization and automatically trigger migration seeding if no data exists",
       "reqIds": [
         "REQ-4"
       ],
       "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add initialization logging to backend/main.mo to track when migration seeding occurs and report success or failure",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Ensure migration.mo seeding logic is invoked during backend initialization when storage is empty, populating all 27 Nakshatras with their complete astronomical and mythological data",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
     }
   ],
-  "projectName": "Star Field Explorer",
+  "projectName": "Fix backend initialization error causing 'No Nakshatras found'",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

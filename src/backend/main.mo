@@ -4,54 +4,43 @@ import Iter "mo:core/Iter";
 import Principal "mo:core/Principal";
 import Blob "mo:core/Blob";
 import Runtime "mo:core/Runtime";
+import Debug "mo:core/Debug";
 import MixinStorage "blob-storage/Mixin";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
-import Nat "mo:core/Nat";
+import Migration "migration";
 
-// Remove the unused migration with clause
+// Actor definition
 actor {
   include MixinStorage();
 
-  // Initialize the access control system
-  let accessControlState = AccessControl.initState();
-  include MixinAuthorization(accessControlState);
+  module Internal {
+    public func initializeAndMigrateIfNeeded(emptyMap : Map.Map<Text, Nakshatra>) : Map.Map<Text, Nakshatra> {
+      if (emptyMap.isEmpty()) {
+        Debug.print("Migration seeding triggered!");
+        let newMap = Migration.seedDataFromMigration();
+        if (newMap.isEmpty()) {
+          Debug.print("Migration seeding failed!");
+        } else {
+          Debug.print("Migration seeding successful. 27 Nakshatras loaded.");
+        };
+        return newMap;
+      } else {
+        return emptyMap;
+      };
+    };
+  };
 
-  // User Profile System
+  // Types needed for persistent state system
   public type UserProfile = {
     name : Text;
   };
 
-  let userProfiles = Map.empty<Principal, UserProfile>();
-
-  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access profiles");
-    };
-    userProfiles.get(caller);
-  };
-
-  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
-      Runtime.trap("Unauthorized: Can only view your own profile");
-    };
-    userProfiles.get(user);
-  };
-
-  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
-    userProfiles.add(caller, profile);
-  };
-
-  // Nakshatra Types
   public type PadaInfo = {
     title : Text;
     description : Text;
   };
 
-  // New Nakshatra type with additional fields
   public type Nakshatra = {
     name : Text;
     imageId : ?Text;
@@ -67,41 +56,44 @@ actor {
     pada4 : PadaInfo;
   };
 
-  // Export/Import types
-  public type ImageExport = {
-    imageId : Text;
-    imageData : Blob;
-  };
+  // Persistent State
+  let nakshatraMapInternal = Map.empty<Text, Nakshatra>();
+  // Call initialization function to apply migration if storage is empty
+  let nakshatraMap = Internal.initializeAndMigrateIfNeeded(nakshatraMapInternal);
 
-  let nakshatraMap = Map.empty<Text, Nakshatra>();
-
-  // Blob storage for images
+  let userProfiles = Map.empty<Principal, UserProfile>();
+  let accessControlState = AccessControl.initState();
+  include MixinAuthorization(accessControlState);
   let imageStore = Map.empty<Text, Blob>();
   var nextImageId = 1;
 
-  // Admin-only: Create new Nakshatra
+  // User Profile System
+  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
+    validateAccess(#user, caller);
+    userProfiles.get(caller);
+  };
+
+  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
+    validateSelfOrAdmin(user, caller);
+    userProfiles.get(user);
+  };
+
+  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
+    validateAccess(#user, caller);
+    userProfiles.add(caller, profile);
+  };
+
+  // Nakshatra Operations
   public shared ({ caller }) func createNakshatra(nakshatra : Nakshatra) : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can create Nakshatras");
-    };
+    validateAccess(#admin, caller);
     nakshatraMap.add(nakshatra.name, nakshatra);
     true;
   };
 
-  // Public: Read Nakshatra
-  public query ({ caller }) func readNakshatra(name : Text) : async ?Nakshatra {
-    nakshatraMap.get(name);
-  };
-
-  // User-only: Update Nakshatra (excluding image)
   public shared ({ caller }) func updateNakshatra(nakshatra : Nakshatra) : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only authenticated users can update Nakshatras");
-    };
+    validateAccess(#user, caller);
     switch (nakshatraMap.get(nakshatra.name)) {
-      case (null) {
-        Runtime.trap("Nakshatra not found");
-      };
+      case (null) { Runtime.trap("Nakshatra not found") };
       case (?existingNakshatra) {
         let updatedNakshatra : Nakshatra = {
           name = nakshatra.name;
@@ -123,22 +115,22 @@ actor {
     true;
   };
 
-  // Admin-only: Delete Nakshatra
   public shared ({ caller }) func deleteNakshatra(name : Text) : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can delete Nakshatras");
-    };
+    validateAccess(#admin, caller);
     let existed = nakshatraMap.containsKey(name);
     nakshatraMap.remove(name);
     existed;
   };
 
-  // Public read: Anyone can get all Nakshatras
+  // Public bublic read
+  public query ({ caller }) func readNakshatra(name : Text) : async ?Nakshatra {
+    nakshatraMap.get(name);
+  };
+
   public query ({ caller }) func getAllNakshatras() : async [Nakshatra] {
     nakshatraMap.values().toArray();
   };
 
-  // Public read: Anyone can get Nakshatra by number
   public query ({ caller }) func getNakshatraByNumber(number : Nat) : async ?Nakshatra {
     if (number < 1 or number > 27) {
       return null;
@@ -150,7 +142,6 @@ actor {
     ?nakshatras[number - 1];
   };
 
-  // Public read: Anyone can search Nakshatras
   public query ({ caller }) func searchNakshatras(term : Text) : async [Nakshatra] {
     let searchTerm = term.toLower();
     let iter = nakshatraMap.values();
@@ -164,11 +155,9 @@ actor {
     filtered.toArray();
   };
 
-  // User-only: Replace Nakshatra image
+  // Image management
   public shared ({ caller }) func replaceNakshatraImage(nakshatraName : Text, imageData : Blob) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only authenticated users can replace images");
-    };
+    validateAccess(#user, caller);
 
     switch (nakshatraMap.get(nakshatraName)) {
       case (null) { Runtime.trap("Nakshatra not found") };
@@ -185,88 +174,45 @@ actor {
     };
   };
 
-  // Public read: Anyone can retrieve image by ID
   public query ({ caller }) func getImage(imageId : Text) : async ?Blob {
     imageStore.get(imageId);
   };
 
-  // User-only: Upload image (authenticated users only, not anonymous)
   public shared ({ caller }) func uploadImage(imageData : Blob) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only authenticated users can upload images");
-    };
+    validateAccess(#user, caller);
     let newImageId = nextImageId.toText();
     imageStore.add(newImageId, imageData);
     nextImageId += 1;
     newImageId;
   };
 
-  // Admin-only: Delete image
   public shared ({ caller }) func deleteImage(imageId : Text) : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can delete images");
-    };
+    validateAccess(#admin, caller);
     let existed = imageStore.containsKey(imageId);
     imageStore.remove(imageId);
     existed;
   };
 
-  // Admin-only: Export all Nakshatra data
-  public query ({ caller }) func exportNakshatraData() : async [Nakshatra] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can export Nakshatra data");
-    };
-    nakshatraMap.values().toArray();
-  };
-
-  // Admin-only: Export all image blobs with metadata
-  public query ({ caller }) func exportImageData() : async [ImageExport] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can export image data");
-    };
-    let exports = Map.empty<Text, ImageExport>();
-    for ((imageId, imageData) in imageStore.entries()) {
-      exports.add(imageId, { imageId; imageData });
-    };
-    exports.values().toArray();
-  };
-
-  // Admin-only: Import Nakshatra data (replaces all existing entries)
-  public shared ({ caller }) func importNakshatraData(nakshatras : [Nakshatra]) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can import Nakshatra data");
-    };
-
-    // Clear existing data
-    for (key in nakshatraMap.keys()) {
-      nakshatraMap.remove(key);
-    };
-
-    // Import new data
-    for (nakshatra in nakshatras.vals()) {
-      nakshatraMap.add(nakshatra.name, nakshatra);
+  // Access control helpers
+  func validateAccess(requiredRole : AccessControl.UserRole, caller : Principal) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, requiredRole))) {
+      let roleText = roleToText(requiredRole);
+      Runtime.trap("Unauthorized: Only " # roleText # " can perform this action");
     };
   };
 
-  // Admin-only: Import image data (replaces existing images with matching IDs)
-  public shared ({ caller }) func importImageData(images : [ImageExport]) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can import image data");
+  func validateSelfOrAdmin(target : Principal, caller : Principal) {
+    if (caller != target and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only view your own profile");
     };
+  };
 
-    // Import images, replacing any with matching IDs
-    for (imageExport in images.vals()) {
-      imageStore.add(imageExport.imageId, imageExport.imageData);
-
-      // Update nextImageId if necessary to avoid conflicts
-      switch (Nat.fromText(imageExport.imageId)) {
-        case (?id) {
-          if (id >= nextImageId) {
-            nextImageId := id + 1;
-          };
-        };
-        case (null) { /* Non-numeric ID, ignore */ };
-      };
+  func roleToText(role : AccessControl.UserRole) : Text {
+    switch (role) {
+      case (#admin) { "admins" };
+      case (#user) { "users" };
+      case (#guest) { "guests" };
     };
   };
 };
+

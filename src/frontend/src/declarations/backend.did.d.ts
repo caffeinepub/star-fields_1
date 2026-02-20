@@ -10,7 +10,6 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface ImageExport { 'imageData' : Uint8Array, 'imageId' : string }
 export interface Nakshatra {
   'karmicLesson' : string,
   'rulingDeity' : string,
@@ -62,16 +61,12 @@ export interface _SERVICE {
   'createNakshatra' : ActorMethod<[Nakshatra], boolean>,
   'deleteImage' : ActorMethod<[string], boolean>,
   'deleteNakshatra' : ActorMethod<[string], boolean>,
-  'exportImageData' : ActorMethod<[], Array<ImageExport>>,
-  'exportNakshatraData' : ActorMethod<[], Array<Nakshatra>>,
   'getAllNakshatras' : ActorMethod<[], Array<Nakshatra>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getImage' : ActorMethod<[string], [] | [Uint8Array]>,
   'getNakshatraByNumber' : ActorMethod<[bigint], [] | [Nakshatra]>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
-  'importImageData' : ActorMethod<[Array<ImageExport>], undefined>,
-  'importNakshatraData' : ActorMethod<[Array<Nakshatra>], undefined>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'readNakshatra' : ActorMethod<[string], [] | [Nakshatra]>,
   'replaceNakshatraImage' : ActorMethod<[string, Uint8Array], undefined>,

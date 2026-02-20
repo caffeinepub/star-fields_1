@@ -42,10 +42,6 @@ export const Nakshatra = IDL.Record({
   'characteristics' : IDL.Text,
   'symbol' : IDL.Text,
 });
-export const ImageExport = IDL.Record({
-  'imageData' : IDL.Vec(IDL.Nat8),
-  'imageId' : IDL.Text,
-});
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 
 export const idlService = IDL.Service({
@@ -80,8 +76,6 @@ export const idlService = IDL.Service({
   'createNakshatra' : IDL.Func([Nakshatra], [IDL.Bool], []),
   'deleteImage' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'deleteNakshatra' : IDL.Func([IDL.Text], [IDL.Bool], []),
-  'exportImageData' : IDL.Func([], [IDL.Vec(ImageExport)], ['query']),
-  'exportNakshatraData' : IDL.Func([], [IDL.Vec(Nakshatra)], ['query']),
   'getAllNakshatras' : IDL.Func([], [IDL.Vec(Nakshatra)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
@@ -92,8 +86,6 @@ export const idlService = IDL.Service({
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
-  'importImageData' : IDL.Func([IDL.Vec(ImageExport)], [], []),
-  'importNakshatraData' : IDL.Func([IDL.Vec(Nakshatra)], [], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'readNakshatra' : IDL.Func([IDL.Text], [IDL.Opt(Nakshatra)], ['query']),
   'replaceNakshatraImage' : IDL.Func([IDL.Text, IDL.Vec(IDL.Nat8)], [], []),
@@ -137,10 +129,6 @@ export const idlFactory = ({ IDL }) => {
     'characteristics' : IDL.Text,
     'symbol' : IDL.Text,
   });
-  const ImageExport = IDL.Record({
-    'imageData' : IDL.Vec(IDL.Nat8),
-    'imageId' : IDL.Text,
-  });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
   
   return IDL.Service({
@@ -175,8 +163,6 @@ export const idlFactory = ({ IDL }) => {
     'createNakshatra' : IDL.Func([Nakshatra], [IDL.Bool], []),
     'deleteImage' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'deleteNakshatra' : IDL.Func([IDL.Text], [IDL.Bool], []),
-    'exportImageData' : IDL.Func([], [IDL.Vec(ImageExport)], ['query']),
-    'exportNakshatraData' : IDL.Func([], [IDL.Vec(Nakshatra)], ['query']),
     'getAllNakshatras' : IDL.Func([], [IDL.Vec(Nakshatra)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
@@ -191,8 +177,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
-    'importImageData' : IDL.Func([IDL.Vec(ImageExport)], [], []),
-    'importNakshatraData' : IDL.Func([IDL.Vec(Nakshatra)], [], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'readNakshatra' : IDL.Func([IDL.Text], [IDL.Opt(Nakshatra)], ['query']),
     'replaceNakshatraImage' : IDL.Func([IDL.Text, IDL.Vec(IDL.Nat8)], [], []),
