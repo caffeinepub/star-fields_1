@@ -1,91 +1,159 @@
 {
   "kind": "build_request",
-  "title": "Update Lunar Climate Today content for all 27 Nakshatras",
+  "title": "Implement automatic live-to-draft data synchronization",
   "projectName": "Star Field Explorer",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the Nakshatra data structure in backend/main.mo to include two new text fields: 'lunarClimate' (atmospheric daily transit description) and 'karmicLesson' (reflective wisdom for the day)",
+      "text": "Add a backend function to export all Nakshatra data including text content (name, description, deity, symbol, characteristics, lunarClimate, karmicLesson, and all four pada descriptions) and return it as a serializable data structure",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-10"
+          "msg-final"
         ],
         "quotes": [
-          "Ashwini days feel fast, instinctive, and catalytic...",
-          "Karmic lesson: Act with courage — but remember that beginnings require sustainability, not just speed."
+          "ALL data from live (all nakshatra text + all uploaded images)"
         ]
       },
       "acceptanceCriteria": [
-        "Nakshatra type includes lunarClimate field as Text",
-        "Nakshatra type includes karmicLesson field as Text",
-        "Both fields are persisted in stable storage"
+        "Backend exposes a query function that returns complete Nakshatra data for all 27 entries",
+        "Exported data includes all text fields and references to associated image IDs",
+        "Function is callable by authenticated users with appropriate permissions"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Populate all 27 Nakshatras with the provided atmospheric lunar climate descriptions and karmic lessons exactly as specified: Ashwini (fast, instinctive, catalytic momentum / Act with courage but remember sustainability), Bharani (emotional intensity and moral weight / Freedom requires accountability), Krittika (sharpens perception, exposes refinement needs / Growth requires discernment), Rohini (softens with beauty and attachment / Enjoy growth without clinging), Mrigashira (curious and searching, restless / Seek without fleeing), Ardra (storm energy, breaks open truths / Transformation through discomfort), Punarvasu (restores optimism and hope / Resilience is remembering light returns), Pushya (steadies with responsibility and care / Service strengthens the soul), Ashlesha (deepens perception of hidden motives / Use insight for healing not control), Magha (legacy and ancestral themes / Honor lineage with humility), Purva Phalguni (pleasure and artistic flow / Joy is sacred, balance indulgence), Uttara Phalguni (commitment and loyalty / True partnership requires consistency), Hasta (sharpens skill and communication / Mastery through refinement), Chitra (inspires refinement and self-expression / Create with authenticity), Swati (wind-like independence / Freedom needs direction), Vishakha (intensifies ambition / Pursue victory with integrity), Anuradha (devotion and cooperation / Loyalty without losing self), Jyeshtha (power dynamics surface / Leadership requires humility), Mula (uproots illusions / Liberation through releasing false roots), Purva Ashadha (conviction and enthusiasm / Confidence with openness to growth), Uttara Ashadha (discipline and endurance / Victory through sustained effort), Shravana (heightens listening / Wisdom from attentive presence), Dhanishtha (productivity and timing / Align with collective harmony), Shatabhisha (turns inward, analytical / Solitude reveals truths), Purva Bhadrapada (existential intensity / Transformation demands surrender), Uttara Bhadrapada (patience and depth / Stability from inner depth), Revati (softens and closes cycle / Completion is sacred)",
+      "text": "Add a backend function to export all uploaded image blobs with their associated Nakshatra IDs, returning image data and metadata in a format suitable for cross-canister transfer",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-10"
+          "msg-final"
+        ],
+        "quotes": [
+          "ALL data from live (all nakshatra text + all uploaded images)"
         ]
       },
       "acceptanceCriteria": [
-        "All 27 Nakshatras have lunarClimate text populated with atmospheric descriptions",
-        "All 27 Nakshatras have karmicLesson text populated with wisdom statements",
-        "Content matches the provided descriptions exactly for each Nakshatra"
+        "Backend exposes a query function that returns all stored image blobs with their IDs",
+        "Image data is returned in a format that can be imported into another canister",
+        "Function handles large image payloads efficiently"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
-      "target": "frontend",
+      "text": "Add a backend import function that accepts Nakshatra data and replaces all existing Nakshatra entries, ensuring imported data completely overwrites current state",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-10",
-          "msg-12"
+          "msg-final"
         ],
         "quotes": [
-          "content changes based on which Nakshatra the Moon is currently transiting"
+          "always live",
+          "all data uploaded in the live app will be synced in future drafts"
         ]
       },
       "acceptanceCriteria": [
-        "Lunar climate description is displayed in the current Nakshatra banner",
-        "Karmic lesson is displayed in the current Nakshatra banner",
-        "Content updates automatically when Moon transits to a different Nakshatra",
-        "Display integrates naturally with existing pada details layout"
+        "Backend exposes an update function that accepts complete Nakshatra dataset",
+        "Import function completely replaces existing Nakshatra data with imported data",
+        "Live data always takes priority over any existing draft data",
+        "Function is restricted to authenticated admin users"
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
-      "target": "frontend",
+      "text": "Add a backend import function that accepts image data with IDs and stores all imported images, replacing any existing images with matching IDs",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-10"
+          "msg-final"
+        ],
+        "quotes": [
+          "ALL data from live (all nakshatra text + all uploaded images)",
+          "always live"
         ]
       },
       "acceptanceCriteria": [
-        "Admin edit form includes textarea for lunar climate",
-        "Admin edit form includes textarea for karmic lesson",
-        "Both fields save successfully via updateNakshatra mutation",
-        "Existing content is displayed when editing a Nakshatra"
+        "Backend exposes an update function that accepts image data with IDs",
+        "Import function stores all images and overwrites any existing images with the same ID",
+        "Function handles large image payloads efficiently",
+        "Function is restricted to authenticated admin users"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Create a frontend admin utility that automatically fetches all data from the live canister and imports it into the draft canister when triggered, implementing the complete sync workflow",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "automatically",
+          "ALL data from live (all nakshatra text + all uploaded images)",
+          "all data uploaded in the live app will be synced in future drafts"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Frontend implements logic to call live canister export functions",
+        "Frontend calls draft canister import functions with exported data",
+        "Sync process handles both Nakshatra text data and image blobs",
+        "Sync shows progress feedback to admin users",
+        "Error handling provides clear messages if sync fails"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add a 'Sync from Live' button in the admin panel that triggers the automatic data synchronization from live to draft, displaying sync progress and completion status",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "automatically",
+          "all data uploaded in the live app will be synced in future drafts"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel includes a clearly labeled sync button",
+        "Button shows loading state during sync operation",
+        "Success message confirms when sync completes",
+        "Error messages display if sync fails with actionable guidance"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Update the AdminPage to display sync status information showing when the last sync occurred and whether draft data is in sync with live data",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "all data uploaded in the live app will be synced in future drafts"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin page shows timestamp of last successful sync",
+        "UI indicates if draft data differs from live data",
+        "Sync status updates automatically after sync operations complete"
       ]
     }
   ],
   "constraints": [
-    "Preserve existing Nakshatra data structure and fields",
-    "Do not modify the nakshatraEngine astronomical calculations",
-    "Maintain existing authentication and authorization patterns",
-    "Keep the expandable pada details interaction pattern in CurrentNakshatraBanner"
+    "Do not modify the existing Nakshatra data structure in backend/main.mo",
+    "Live canister data must always take priority over draft data during sync",
+    "Sync operations must handle large image payloads without timeout errors",
+    "Export and import functions must preserve all Nakshatra fields including pada descriptions"
   ],
   "nonGoals": [
-    "Changing how the current Nakshatra is calculated",
-    "Modifying the overall page layout or navigation structure",
-    "Adding new pages or routes",
-    "Changing the visual design or color scheme"
+    "Bidirectional sync (draft to live)",
+    "Selective sync of individual Nakshatras",
+    "Manual conflict resolution UI",
+    "Automatic sync on draft creation without admin trigger",
+    "Version history or rollback functionality",
+    "Real-time sync or webhook-based sync"
   ],
   "imageRequirements": {
     "required": [],

@@ -1,68 +1,101 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T21:12:33.767Z",
+  "generatedAt": "2026-02-20T01:37:52.962Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 2,
+    "total": 7,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the Nakshatra data structure in backend/main.mo to include two new text fields: 'lunarClimate' (atmospheric daily transit description) and 'karmicLesson' (reflective wisdom for the day)",
+        "summary": "Add a backend function to export all Nakshatra data including text content (name, description, deity, symbol, characteristics, lunarClimate, karmicLesson, and all four pada descriptions) and return it as a serializable data structure",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Populate all 27 Nakshatras with the provided atmospheric lunar climate descriptions and karmic lessons exactly as specified: Ashwini (fast, instinctive, catalytic momentum / Act with courage but remember sustainability), Bharani (emotional intensity and moral weight / Freedom requires accountability), Krittika (sharpens perception, exposes refinement needs / Growth requires discernment), Rohini (softens with beauty and attachment / Enjoy growth without clinging), Mrigashira (curious and searching, restless / Seek without fleeing), Ardra (storm energy, breaks open truths / Transformation through discomfort), Punarvasu (restores optimism and hope / Resilience is remembering light returns), Pushya (steadies with responsibility and care / Service strengthens the soul), Ashlesha (deepens perception of hidden motives / Use insight for healing not control), Magha (legacy and ancestral themes / Honor lineage with humility), Purva Phalguni (pleasure and artistic flow / Joy is sacred, balance indulgence), Uttara Phalguni (commitment and loyalty / True partnership requires consistency), Hasta (sharpens skill and communication / Mastery through refinement), Chitra (inspires refinement and self-expression / Create with authenticity), Swati (wind-like independence / Freedom needs direction), Vishakha (intensifies ambition / Pursue victory with integrity), Anuradha (devotion and cooperation / Loyalty without losing self), Jyeshtha (power dynamics surface / Leadership requires humility), Mula (uproots illusions / Liberation through releasing false roots), Purva Ashadha (conviction and enthusiasm / Confidence with openness to growth), Uttara Ashadha (discipline and endurance / Victory through sustained effort), Shravana (heightens listening / Wisdom from attentive presence), Dhanishtha (productivity and timing / Align with collective harmony), Shatabhisha (turns inward, analytical / Solitude reveals truths), Purva Bhadrapada (existential intensity / Transformation demands surrender), Uttara Bhadrapada (patience and depth / Stability from inner depth), Revati (softens and closes cycle / Completion is sacred)",
+        "summary": "Add a backend function to export all uploaded image blobs with their associated Nakshatra IDs, returning image data and metadata in a format suitable for cross-canister transfer",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-3",
-        "summary": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/CurrentNakshatraBanner.tsx",
-          "frontend/src/backend.d.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/CurrentNakshatraBanner.tsx",
-          "frontend/src/backend.d.ts"
-        ]
+        "summary": "Add a backend import function that accepts Nakshatra data and replaces all existing Nakshatra entries, ensuring imported data completely overwrites current state",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-4",
-        "summary": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
+        "summary": "Add a backend import function that accepts image data with IDs and stores all imported images, replacing any existing images with matching IDs",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Create a frontend admin utility that automatically fetches all data from the live canister and imports it into the draft canister when triggered, implementing the complete sync workflow",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/AdminEditPage.tsx"
+          "frontend/src/hooks/useSyncFromLive.ts",
+          "frontend/src/utils/canisterConfig.ts"
         ],
         "matchedFiles": [
-          "frontend/src/pages/AdminEditPage.tsx"
+          "frontend/src/hooks/useSyncFromLive.ts",
+          "frontend/src/utils/canisterConfig.ts"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Add a 'Sync from Live' button in the admin panel that triggers the automatic data synchronization from live to draft, displaying sync progress and completion status",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/SyncFromLiveButton.tsx",
+          "frontend/src/pages/AdminPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/SyncFromLiveButton.tsx",
+          "frontend/src/pages/AdminPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Update the AdminPage to display sync status information showing when the last sync occurred and whether draft data is in sync with live data",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/SyncStatusDisplay.tsx",
+          "frontend/src/pages/AdminPage.tsx",
+          "frontend/src/hooks/useSyncFromLive.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/SyncStatusDisplay.tsx",
+          "frontend/src/pages/AdminPage.tsx",
+          "frontend/src/hooks/useSyncFromLive.ts"
         ]
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
-    "frontend/src/components/CurrentNakshatraBanner.tsx",
+    "frontend/src/components/SyncFromLiveButton.tsx",
+    "frontend/src/components/SyncStatusDisplay.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
-    "frontend/src/pages/AdminEditPage.tsx",
+    "frontend/src/hooks/useSyncFromLive.ts",
+    "frontend/src/pages/AdminPage.tsx",
+    "frontend/src/utils/canisterConfig.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

@@ -7,10 +7,9 @@ import Runtime "mo:core/Runtime";
 import MixinStorage "blob-storage/Mixin";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
-import Migration "migration";
+import Nat "mo:core/Nat";
 
-// Apply migration with with clause.
-(with migration = Migration.run)
+// Remove the unused migration with clause
 actor {
   include MixinStorage();
 
@@ -47,13 +46,13 @@ actor {
   };
 
   // Nakshatra Types
-  type PadaInfo = {
+  public type PadaInfo = {
     title : Text;
     description : Text;
   };
 
   // New Nakshatra type with additional fields
-  type Nakshatra = {
+  public type Nakshatra = {
     name : Text;
     imageId : ?Text;
     description : Text;
@@ -66,6 +65,12 @@ actor {
     pada2 : PadaInfo;
     pada3 : PadaInfo;
     pada4 : PadaInfo;
+  };
+
+  // Export/Import types
+  public type ImageExport = {
+    imageId : Text;
+    imageData : Blob;
   };
 
   let nakshatraMap = Map.empty<Text, Nakshatra>();
@@ -204,5 +209,64 @@ actor {
     let existed = imageStore.containsKey(imageId);
     imageStore.remove(imageId);
     existed;
+  };
+
+  // Admin-only: Export all Nakshatra data
+  public query ({ caller }) func exportNakshatraData() : async [Nakshatra] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can export Nakshatra data");
+    };
+    nakshatraMap.values().toArray();
+  };
+
+  // Admin-only: Export all image blobs with metadata
+  public query ({ caller }) func exportImageData() : async [ImageExport] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can export image data");
+    };
+    let exports = Map.empty<Text, ImageExport>();
+    for ((imageId, imageData) in imageStore.entries()) {
+      exports.add(imageId, { imageId; imageData });
+    };
+    exports.values().toArray();
+  };
+
+  // Admin-only: Import Nakshatra data (replaces all existing entries)
+  public shared ({ caller }) func importNakshatraData(nakshatras : [Nakshatra]) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can import Nakshatra data");
+    };
+
+    // Clear existing data
+    for (key in nakshatraMap.keys()) {
+      nakshatraMap.remove(key);
+    };
+
+    // Import new data
+    for (nakshatra in nakshatras.vals()) {
+      nakshatraMap.add(nakshatra.name, nakshatra);
+    };
+  };
+
+  // Admin-only: Import image data (replaces existing images with matching IDs)
+  public shared ({ caller }) func importImageData(images : [ImageExport]) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can import image data");
+    };
+
+    // Import images, replacing any with matching IDs
+    for (imageExport in images.vals()) {
+      imageStore.add(imageExport.imageId, imageExport.imageData);
+
+      // Update nextImageId if necessary to avoid conflicts
+      switch (Nat.fromText(imageExport.imageId)) {
+        case (?id) {
+          if (id >= nextImageId) {
+            nextImageId := id + 1;
+          };
+        };
+        case (null) { /* Non-numeric ID, ignore */ };
+      };
+    };
   };
 };

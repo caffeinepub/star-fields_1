@@ -25,6 +25,10 @@ export interface PadaInfo {
     title: string;
     description: string;
 }
+export interface ImageExport {
+    imageData: Uint8Array;
+    imageId: string;
+}
 export interface UserProfile {
     name: string;
 }
@@ -38,12 +42,16 @@ export interface backendInterface {
     createNakshatra(nakshatra: Nakshatra): Promise<boolean>;
     deleteImage(imageId: string): Promise<boolean>;
     deleteNakshatra(name: string): Promise<boolean>;
+    exportImageData(): Promise<Array<ImageExport>>;
+    exportNakshatraData(): Promise<Array<Nakshatra>>;
     getAllNakshatras(): Promise<Array<Nakshatra>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getImage(imageId: string): Promise<Uint8Array | null>;
     getNakshatraByNumber(number: bigint): Promise<Nakshatra | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    importImageData(images: Array<ImageExport>): Promise<void>;
+    importNakshatraData(nakshatras: Array<Nakshatra>): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
     readNakshatra(name: string): Promise<Nakshatra | null>;
     replaceNakshatraImage(nakshatraName: string, imageData: Uint8Array): Promise<void>;

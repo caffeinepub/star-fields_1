@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-currentnakshatrabanner-component-to-display-the-lunar-climate-description-and-karmic-lesson-for-the-currently-transiting-nakshatra-in-the-expandable-pada-details-section-replacing-or-augmenting-the-current-interpretive-description",
-      "featureTitle": "Update CurrentNakshatraBanner component to display the lunar climate description and karmic lesson for the currently transiting Nakshatra in the expandable pada details section, replacing or augmenting the current interpretive description",
+      "featureId": "feature-create-a-frontend-admin-utility-that-automatically-fetches-all-data-from-the-live-canister-and-imports-it-into-the-draft-canister-when-triggered-implementing-the-complete-sync-workflow",
+      "featureTitle": "Create a frontend admin utility that automatically fetches all data from the live canister and imports it into the draft canister when triggered, implementing the complete sync workflow",
       "files": [
-        "frontend/src/components/CurrentNakshatraBanner.tsx"
+        "frontend/src/hooks/useSyncFromLive.ts",
+        "frontend/src/utils/canisterConfig.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,15 +18,16 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-5"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-admin-edit-page-to-allow-editing-of-the-new-lunarclimate-and-karmiclesson-fields-for-each-nakshatra",
-      "featureTitle": "Update the admin edit page to allow editing of the new lunarClimate and karmicLesson fields for each Nakshatra",
+      "featureId": "feature-add-a-sync-from-live-button-in-the-admin-panel-that-triggers-the-automatic-data-synchronization-from-live-to-draft-displaying-sync-progress-and-completion-status",
+      "featureTitle": "Add a 'Sync from Live' button in the admin panel that triggers the automatic data synchronization from live to draft, displaying sync progress and completion status",
       "files": [
-        "frontend/src/pages/AdminEditPage.tsx"
+        "frontend/src/components/SyncFromLiveButton.tsx",
+        "frontend/src/pages/AdminPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -37,7 +39,29 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-adminpage-to-display-sync-status-information-showing-when-the-last-sync-occurred-and-whether-draft-data-is-in-sync-with-live-data",
+      "featureTitle": "Update the AdminPage to display sync status information showing when the last sync occurred and whether draft data is in sync with live data",
+      "files": [
+        "frontend/src/components/SyncStatusDisplay.tsx",
+        "frontend/src/hooks/useSyncFromLive.ts",
+        "frontend/src/pages/AdminPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
       ],
       "confidence": "high"
     }

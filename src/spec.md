@@ -1,12 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Add daily atmospheric transit descriptions and karmic wisdom to all 27 Nakshatras, displayed in the Current Nakshatra banner.
+**Goal:** Implement automatic data synchronization from the live canister to draft canister, allowing admins to sync all Nakshatra text content and uploaded images with a single button click.
 
 **Planned changes:**
-- Add lunarClimate and karmicLesson text fields to Nakshatra data structure in backend
-- Populate all 27 Nakshatras with atmospheric descriptions and karmic lessons
-- Display lunar climate and karmic lesson in CurrentNakshatraBanner expandable pada details
-- Add lunar climate and karmic lesson fields to admin edit page
+- Add backend export functions to retrieve all Nakshatra data and images from the live canister
+- Add backend import functions to replace all Nakshatra data and images in the draft canister
+- Create frontend sync utility that fetches data from live and imports it into draft
+- Add "Sync from Live" button in the admin panel with progress feedback
+- Display sync status information showing last sync timestamp and whether draft is in sync with live
 
-**User-visible outcome:** Users see daily atmospheric descriptions and karmic wisdom for the currently transiting Nakshatra in the banner. Admins can edit these fields for each Nakshatra.
+**User-visible outcome:** Admins can click a "Sync from Live" button in the admin panel to automatically copy all Nakshatra content and images from the live app into their draft, seeing progress updates and sync status information.

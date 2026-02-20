@@ -110,6 +110,10 @@ export interface PadaInfo {
 export interface _CaffeineStorageRefillInformation {
     proposed_top_up_amount?: bigint;
 }
+export interface ImageExport {
+    imageData: Uint8Array;
+    imageId: string;
+}
 export interface _CaffeineStorageCreateCertificateResult {
     method: string;
     blob_hash: string;
@@ -138,12 +142,16 @@ export interface backendInterface {
     createNakshatra(nakshatra: Nakshatra): Promise<boolean>;
     deleteImage(imageId: string): Promise<boolean>;
     deleteNakshatra(name: string): Promise<boolean>;
+    exportImageData(): Promise<Array<ImageExport>>;
+    exportNakshatraData(): Promise<Array<Nakshatra>>;
     getAllNakshatras(): Promise<Array<Nakshatra>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getImage(imageId: string): Promise<Uint8Array | null>;
     getNakshatraByNumber(number: bigint): Promise<Nakshatra | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    importImageData(images: Array<ImageExport>): Promise<void>;
+    importNakshatraData(nakshatras: Array<Nakshatra>): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
     readNakshatra(name: string): Promise<Nakshatra | null>;
     replaceNakshatraImage(nakshatraName: string, imageData: Uint8Array): Promise<void>;
@@ -309,6 +317,34 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async exportImageData(): Promise<Array<ImageExport>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.exportImageData();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.exportImageData();
+            return result;
+        }
+    }
+    async exportNakshatraData(): Promise<Array<Nakshatra>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.exportNakshatraData();
+                return from_candid_vec_n12(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.exportNakshatraData();
+            return from_candid_vec_n12(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async getAllNakshatras(): Promise<Array<Nakshatra>> {
         if (this.processError) {
             try {
@@ -391,6 +427,34 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getUserProfile(arg0);
             return from_candid_opt_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async importImageData(arg0: Array<ImageExport>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.importImageData(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.importImageData(arg0);
+            return result;
+        }
+    }
+    async importNakshatraData(arg0: Array<Nakshatra>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.importNakshatraData(to_candid_vec_n21(this._uploadFile, this._downloadFile, arg0));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.importNakshatraData(to_candid_vec_n21(this._uploadFile, this._downloadFile, arg0));
+            return result;
         }
     }
     async isCallerAdmin(): Promise<boolean> {
@@ -662,6 +726,9 @@ function to_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8
     } : value == UserRole.guest ? {
         guest: null
     } : value;
+}
+function to_candid_vec_n21(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Nakshatra>): Array<_Nakshatra> {
+    return value.map((x)=>to_candid_Nakshatra_n10(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;
